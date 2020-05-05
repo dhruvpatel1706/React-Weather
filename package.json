@@ -1,0 +1,50 @@
+{
+  "name": "react-weather",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@material-ui/core": "^4.9.12",
+    "@material-ui/icons": "^4.9.1",
+    "dayjs": "^1.8.25",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-scripts": "^3.4.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
+    "test:non-watch": "react-scripts test --watchAll=false --env=jest-environment-jsdom-sixteen",
+    "coverage": "react-scripts test --coverage --watchAll=false --env=jest-environment-jsdom-sixteen",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.5.0",
+    "@testing-library/react": "^10.0.3",
+    "eslint-plugin-react-hooks": "^2.5.1",
+    "husky": "^3.1.0",
+    "jest-environment-jsdom-sixteen": "^1.0.3",
+    "prettier": "^1.19.1",
+    "pretty-quick": "^2.0.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged && npm run test:non-watch"
+    }
+  }
+}
