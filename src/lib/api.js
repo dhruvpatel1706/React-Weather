@@ -1,8 +1,3 @@
-/**
- * Open-Meteo client. No API key, no signup, CORS-enabled.
- * https://open-meteo.com/en/docs
- */
-
 const FORECAST_URL = "https://api.open-meteo.com/v1/forecast";
 const GEOCODE_URL = "https://geocoding-api.open-meteo.com/v1/search";
 const AIR_URL = "https://air-quality-api.open-meteo.com/v1/air-quality";
@@ -84,7 +79,6 @@ async function getJSON(url, { signal } = {}) {
   return response.json();
 }
 
-/** Search cities by name. Returns [] rather than throwing on no match. */
 export async function searchCities(name, { signal, count = 6 } = {}) {
   const query = name.trim();
   if (query.length < 2) return [];
@@ -111,7 +105,6 @@ function toPlace(result) {
   };
 }
 
-/** Best-effort reverse geocode for the "use my location" flow. */
 export async function reverseGeocode(latitude, longitude, { signal } = {}) {
   const fallback = {
     id: `${latitude.toFixed(3)},${longitude.toFixed(3)}`,
@@ -131,7 +124,11 @@ export async function reverseGeocode(latitude, longitude, { signal } = {}) {
     const data = await getJSON(url, { signal });
     return {
       ...fallback,
-      name: data.city || data.locality || data.principalSubdivision || "My Location",
+      name:
+        data.city ||
+        data.locality ||
+        data.principalSubdivision ||
+        "My Location",
       country: data.countryName ?? "",
       countryCode: data.countryCode ?? "",
       admin: data.principalSubdivision ?? "",
@@ -141,7 +138,6 @@ export async function reverseGeocode(latitude, longitude, { signal } = {}) {
   }
 }
 
-/** Air quality + pollen are bonus signals — never let them fail the whole page. */
 async function fetchAirQuality(latitude, longitude, { signal } = {}) {
   try {
     const url = `${AIR_URL}?${qs({
@@ -154,7 +150,6 @@ async function fetchAirQuality(latitude, longitude, { signal } = {}) {
     const current = data.current ?? {};
     if (current.european_aqi == null && current.us_aqi == null) return null;
 
-    // Pollen is Europe-only in Open-Meteo; absent elsewhere, which is fine.
     const pollen = POLLEN_FIELDS.map((field) => ({
       key: field.replace("_pollen", ""),
       value: current[field] ?? null,
@@ -172,10 +167,6 @@ async function fetchAirQuality(latitude, longitude, { signal } = {}) {
   }
 }
 
-/**
- * Fetch everything the UI needs for one place, normalised into a flat shape.
- * `units` is "metric" or "imperial".
- */
 export async function fetchWeather(place, { signal, units = "metric" } = {}) {
   const imperial = units === "imperial";
   const url = `${FORECAST_URL}?${qs({
@@ -224,7 +215,6 @@ function normalise(data, air, place, units) {
   }));
 
   const hours = allHours.slice(hourIndex, hourIndex + 24);
-  // 48 hours drives the trend chart; the strip above only shows 24.
   const trendHours = allHours.slice(hourIndex, hourIndex + 48);
 
   const allDays = (daily.time ?? []).map((date, index) => ({
@@ -244,7 +234,7 @@ function normalise(data, air, place, units) {
     windDirection: daily.wind_direction_10m_dominant?.[index] ?? null,
   }));
 
-  // past_days=1 puts yesterday at index 0; today starts at index 1.
+  // past_days=1 puts yesterday at index 0, so locate today explicitly.
   const todayIso = nowIso ? nowIso.slice(0, 10) : null;
   let todayIndex = allDays.findIndex((day) => day.date === todayIso);
   if (todayIndex < 0) todayIndex = allDays.length > 1 ? 1 : 0;
@@ -283,10 +273,6 @@ function normalise(data, air, place, units) {
   };
 }
 
-/**
- * 15-minute precipitation buckets for the nowcast, trimmed to the next 12
- * hours starting from the current slot.
- */
 function normaliseMinutely(minutely, nowIso) {
   const times = minutely.time ?? [];
   if (!times.length) return [];

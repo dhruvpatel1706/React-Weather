@@ -1,11 +1,6 @@
 import { useEffect } from "react";
 import { usePrefersReducedMotion } from "./usePrefersReducedMotion.js";
 
-/**
- * Publishes scroll position as a --scroll custom property on :root, normalised
- * so 1 equals one viewport height. Parallax layers read it directly in CSS,
- * which keeps the work on the compositor instead of in React renders.
- */
 export function useScrollProgress() {
   const reducedMotion = usePrefersReducedMotion();
 

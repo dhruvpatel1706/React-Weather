@@ -30,7 +30,9 @@ describe("DailyForecast", () => {
   });
 
   it("renders nothing without daily data", () => {
-    const { container } = render(<DailyForecast weather={{ ...weather, days: [] }} />);
+    const { container } = render(
+      <DailyForecast weather={{ ...weather, days: [] }} />
+    );
     expect(container).toBeEmptyDOMElement();
   });
 });
@@ -43,7 +45,9 @@ describe("HourlyStrip", () => {
   });
 
   it("renders nothing without hourly data", () => {
-    const { container } = render(<HourlyStrip weather={{ ...weather, hours: [] }} />);
+    const { container } = render(
+      <HourlyStrip weather={{ ...weather, hours: [] }} />
+    );
     expect(container).toBeEmptyDOMElement();
   });
 });
@@ -58,7 +62,9 @@ describe("Nowcast", () => {
   });
 
   it("renders nothing without a minutely series", () => {
-    const { container } = render(<Nowcast weather={{ ...weather, minutely: [] }} />);
+    const { container } = render(
+      <Nowcast weather={{ ...weather, minutely: [] }} />
+    );
     expect(container).toBeEmptyDOMElement();
   });
 });

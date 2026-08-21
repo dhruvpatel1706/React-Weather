@@ -1,15 +1,25 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { renderHook, waitFor, act } from "@testing-library/react";
 import { useWeather } from "./useWeather.js";
-import { PLACE, forecastResponse, airQualityResponse } from "../test/fixtures.js";
+import {
+  PLACE,
+  forecastResponse,
+  airQualityResponse,
+} from "../test/fixtures.js";
 import { saveLastWeather } from "../lib/storage.js";
 
-const ok = (body) => ({ ok: true, status: 200, json: () => Promise.resolve(body) });
+const ok = (body) => ({
+  ok: true,
+  status: 200,
+  json: () => Promise.resolve(body),
+});
 
 beforeEach(() => {
   globalThis.fetch = vi.fn((url) =>
     Promise.resolve(
-      String(url).includes("air-quality") ? ok(airQualityResponse()) : ok(forecastResponse())
+      String(url).includes("air-quality")
+        ? ok(airQualityResponse())
+        : ok(forecastResponse())
     )
   );
 });
@@ -28,7 +38,11 @@ describe("useWeather", () => {
 
   it("surfaces an error when the request fails and nothing is cached", async () => {
     globalThis.fetch = vi.fn(() =>
-      Promise.resolve({ ok: false, status: 500, json: () => Promise.resolve({}) })
+      Promise.resolve({
+        ok: false,
+        status: 500,
+        json: () => Promise.resolve({}),
+      })
     );
     const { result } = renderHook(() => useWeather(PLACE, "metric"));
     await waitFor(() => expect(result.current.status).toBe("error"));

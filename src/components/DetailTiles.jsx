@@ -13,7 +13,6 @@ import {
 } from "../lib/format.js";
 import "../styles/tiles.css";
 
-/** iOS-style grid of secondary readings. Extra tiles pass through as children. */
 export default function DetailTiles({ weather, children }) {
   const { current, days, air, units, timezone } = weather;
   const today = days?.[0];
@@ -36,7 +35,9 @@ export default function DetailTiles({ weather, children }) {
       <AirTile air={air} />
       <Tile
         title="Humidity"
-        value={current.humidity == null ? "--" : `${Math.round(current.humidity)}%`}
+        value={
+          current.humidity == null ? "--" : `${Math.round(current.humidity)}%`
+        }
         note={humidityDescriptor(current.humidity)}
         index={4}
       >
@@ -56,7 +57,9 @@ export default function DetailTiles({ weather, children }) {
       />
       <Tile
         title="Pressure"
-        value={current.pressure == null ? "--" : `${Math.round(current.pressure)}`}
+        value={
+          current.pressure == null ? "--" : `${Math.round(current.pressure)}`
+        }
         note={`hPa · ${pressureDescriptor(current.pressure)}`}
         index={7}
       />
@@ -70,8 +73,6 @@ export default function DetailTiles({ weather, children }) {
     </section>
   );
 }
-
-/* --- shared shell ------------------------------------------------------- */
 
 function Tile({ title, value, note, children, index = 0, wide = false }) {
   const ref = useGlassPointer();
@@ -95,12 +96,13 @@ function Meter({ value, max, level }) {
   const pct = value == null ? 0 : Math.min(100, (value / max) * 100);
   return (
     <div className="meter" aria-hidden="true">
-      <div className={`meter__fill meter__fill--${level}`} style={{ width: `${pct}%` }} />
+      <div
+        className={`meter__fill meter__fill--${level}`}
+        style={{ width: `${pct}%` }}
+      />
     </div>
   );
 }
-
-/* --- individual tiles --------------------------------------------------- */
 
 function UvTile({ uv, max }) {
   const { label, level } = uvDescriptor(uv);
@@ -141,7 +143,7 @@ function WindTile({ speed, gusts, direction, units }) {
         <span className="compass__n">N</span>
         <span
           className="compass__needle"
-          style={{ transform: `rotate(${(direction ?? 0) + 180}deg)` }}
+          style={{ transform: `rotate(${(direction ?? 0) + 180}deg)` }} // points downwind
         />
         <span className="compass__dir">{compassDirection(direction)}</span>
       </div>
@@ -151,7 +153,6 @@ function WindTile({ speed, gusts, direction, units }) {
 
 function SunTile({ sunrise, sunset, now, timezone }) {
   const progress = sunProgress(sunrise, sunset, now);
-  // Semi-circular arc from (10,50) to (90,50); position the marker along it.
   const angle = Math.PI * (1 - progress);
   const x = 50 + 40 * Math.cos(angle);
   const y = 50 - 40 * Math.sin(angle);
@@ -207,8 +208,6 @@ function AirTile({ air }) {
   );
 }
 
-/* --- helpers ------------------------------------------------------------ */
-
 export function sunProgress(sunrise, sunset, now) {
   if (!sunrise || !sunset || !now) return 0;
   const rise = parseLocalIso(sunrise).getTime();
@@ -225,7 +224,6 @@ function feelsNote(actual, feels) {
   return delta > 0 ? "Humidity makes it warmer" : "Wind makes it colder";
 }
 
-/** Dew point comfort bands, converted for imperial so the thresholds hold. */
 function dewNote(dewPoint, units) {
   if (dewPoint == null) return "";
   const celsius = units === "imperial" ? ((dewPoint - 32) * 5) / 9 : dewPoint;

@@ -8,6 +8,7 @@ import Nowcast from "./components/Nowcast.jsx";
 import HourlyStrip from "./components/HourlyStrip.jsx";
 import TrendChart from "./components/TrendChart.jsx";
 import DailyForecast from "./components/DailyForecast.jsx";
+import DayDial from "./components/DayDial.jsx";
 import DetailTiles from "./components/DetailTiles.jsx";
 import AstroTiles from "./components/AstroTiles.jsx";
 import PollenTile from "./components/PollenTile.jsx";
@@ -35,7 +36,6 @@ const DEFAULT_PLACE = {
 
 const REFRESH_MS = 10 * 60 * 1000;
 
-/** Cold start: URL → last viewed → default. */
 function initialPlace() {
   return placeFromUrl() ?? loadLastWeather()?.place ?? DEFAULT_PLACE;
 }
@@ -58,7 +58,6 @@ export default function App() {
   }, [theme]);
   useEffect(() => syncUrl(place), [place]);
 
-  // Refresh on an interval, and when the tab regains focus after a while.
   useEffect(() => {
     const timer = setInterval(refresh, REFRESH_MS);
     const onVisible = () => {
@@ -72,11 +71,15 @@ export default function App() {
     };
   }, [refresh, weather?.fetchedAt]);
 
-  // Shortcuts: "/" focuses search, "r" refreshes, "u" flips units.
   useEffect(() => {
     const onKeyDown = (event) => {
       const tag = event.target?.tagName;
-      if (tag === "INPUT" || tag === "TEXTAREA" || event.metaKey || event.ctrlKey) {
+      if (
+        tag === "INPUT" ||
+        tag === "TEXTAREA" ||
+        event.metaKey ||
+        event.ctrlKey
+      ) {
         return;
       }
       if (event.key === "/") {
@@ -95,15 +98,11 @@ export default function App() {
   const useMyLocation = useCallback(() => {
     locate()
       .then(setPlace)
-      .catch(() => {
-        /* useGeolocation surfaces the message */
-      });
+      .catch(() => {});
   }, [locate]);
 
   const styleVars = useMemo(() => skyVariables(weather), [weather]);
 
-  // Sky variables live on :root so the body gradient, the fixed backdrop and
-  // the mobile status-bar colour all stay in step.
   useEffect(() => {
     const root = document.documentElement;
     for (const [name, value] of Object.entries(styleVars)) {
@@ -173,7 +172,10 @@ export default function App() {
 
               <div className="sheet__split">
                 <DailyForecast weather={weather} />
-                <TrendChart weather={weather} />
+                <div className="stack">
+                  <DayDial weather={weather} />
+                  <TrendChart weather={weather} />
+                </div>
               </div>
 
               <DetailTiles weather={weather}>
@@ -187,7 +189,11 @@ export default function App() {
         <footer className="app__footer">
           <p>
             Weather by{" "}
-            <a href="https://open-meteo.com" target="_blank" rel="noopener noreferrer">
+            <a
+              href="https://open-meteo.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Open-Meteo
             </a>
             {" · "}

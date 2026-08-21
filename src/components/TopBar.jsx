@@ -5,13 +5,18 @@ import WeatherIcon from "./WeatherIcon.jsx";
 import { degrees } from "../lib/format.js";
 import "../styles/topbar.css";
 
-/**
- * Sticky header. Once the hero scrolls away it condenses: the city and its
- * current temperature fade in beside the search field, so you always know
- * what you are looking at without scrolling back up.
- */
 const TopBar = forwardRef(function TopBar(
-  { onSelect, onLocate, locating, units, onUnitsChange, place, theme, onThemeChange, weather },
+  {
+    onSelect,
+    onLocate,
+    locating,
+    units,
+    onUnitsChange,
+    place,
+    theme,
+    onThemeChange,
+    weather,
+  },
   searchRef
 ) {
   const [condensed, setCondensed] = useState(false);
@@ -45,7 +50,11 @@ const TopBar = forwardRef(function TopBar(
         </div>
 
         <div className="topbar__search" ref={searchRef}>
-          <SearchBar onSelect={onSelect} onLocate={onLocate} locating={locating} />
+          <SearchBar
+            onSelect={onSelect}
+            onLocate={onLocate}
+            locating={locating}
+          />
         </div>
 
         <Toolbar

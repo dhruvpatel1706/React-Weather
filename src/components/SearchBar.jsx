@@ -3,11 +3,6 @@ import { searchCities } from "../lib/api.js";
 import { useDebounce } from "../hooks/useDebounce.js";
 import "../styles/search.css";
 
-/**
- * City search with a debounced autocomplete built on the Open-Meteo geocoder.
- * Implements the combobox keyboard pattern: arrows move the active option,
- * Enter selects it, Escape closes the list.
- */
 export default function SearchBar({ onSelect, onLocate, locating }) {
   const [term, setTerm] = useState("");
   const [results, setResults] = useState([]);
@@ -51,7 +46,6 @@ export default function SearchBar({ onSelect, onLocate, locating }) {
     return () => controller.abort();
   }, [debounced]);
 
-  // Close the dropdown on an outside click.
   useEffect(() => {
     if (!open) return undefined;
     const onPointerDown = (event) => {
@@ -127,7 +121,11 @@ export default function SearchBar({ onSelect, onLocate, locating }) {
       </div>
 
       {open && (results.length > 0 || error) && (
-        <ul className="search__results glass glass--strong" id={listId} role="listbox">
+        <ul
+          className="search__results glass glass--strong"
+          id={listId}
+          role="listbox"
+        >
           {results.map((place, index) => (
             <li key={place.id} role="presentation">
               <button

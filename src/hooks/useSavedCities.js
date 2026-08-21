@@ -3,7 +3,6 @@ import { loadCities, saveCities } from "../lib/storage.js";
 
 const LIMIT = 8;
 
-/** Pinned cities, persisted to localStorage. */
 export function useSavedCities() {
   const [cities, setCities] = useState(loadCities);
 

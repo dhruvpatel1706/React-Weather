@@ -7,7 +7,6 @@ const MESSAGES = {
   3: "Timed out finding your location.",
 };
 
-/** Wraps the Geolocation API and resolves coordinates to a named place. */
 export function useGeolocation() {
   const [locating, setLocating] = useState(false);
   const [error, setError] = useState(null);
@@ -36,7 +35,8 @@ export function useGeolocation() {
           }
         },
         (cause) => {
-          const message = MESSAGES[cause.code] ?? "Could not get your location.";
+          const message =
+            MESSAGES[cause.code] ?? "Could not get your location.";
           setError(message);
           setLocating(false);
           reject(new Error(message));

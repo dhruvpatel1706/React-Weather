@@ -2,10 +2,6 @@ import { useId } from "react";
 import { degrees, formatHour } from "../lib/format.js";
 import "../styles/trend.css";
 
-/**
- * 48-hour temperature curve with precipitation-probability bars behind it.
- * Drawn as a plain SVG — no charting dependency.
- */
 export default function TrendChart({ weather }) {
   const gradientId = useId();
   const hours = weather.trendHours ?? weather.hours ?? [];
@@ -24,7 +20,6 @@ export default function TrendChart({ weather }) {
   const span = max - min || 1;
 
   const x = (index) => (index / (hours.length - 1)) * width;
-  // Labels are centred on their point, so keep them clear of both edges.
   const labelX = (index) => Math.min(width - 18, Math.max(18, x(index)));
   const y = (temp) =>
     padTop + (1 - (temp - min) / span) * (height - padTop - padBottom);
@@ -54,11 +49,15 @@ export default function TrendChart({ weather }) {
   );
 
   const ticks = [0, 12, 24, 36, hours.length - 1].filter(
-    (index, position, list) => index < hours.length && list.indexOf(index) === position
+    (index, position, list) =>
+      index < hours.length && list.indexOf(index) === position
   );
 
   return (
-    <section className="trend panel glass glass--refract rise" style={{ "--i": 2 }}>
+    <section
+      className="trend panel glass glass--refract rise"
+      style={{ "--i": 2 }}
+    >
       <h2 className="eyebrow">48-hour trend</h2>
       <div className="trend__scroll scroll-x">
         <svg
@@ -80,7 +79,8 @@ export default function TrendChart({ weather }) {
           {hours.map((hour, index) => {
             const probability = hour.precipitationProbability ?? 0;
             if (probability < 5) return null;
-            const barHeight = (probability / 100) * (height - padTop - padBottom) * 0.55;
+            const barHeight =
+              (probability / 100) * (height - padTop - padBottom) * 0.55;
             return (
               <rect
                 key={hour.time}
@@ -133,9 +133,17 @@ export default function TrendChart({ weather }) {
               x={x(index)}
               y={height - 10}
               className="trend__tick"
-              textAnchor={index === 0 ? "start" : index === hours.length - 1 ? "end" : "middle"}
+              textAnchor={
+                index === 0
+                  ? "start"
+                  : index === hours.length - 1
+                    ? "end"
+                    : "middle"
+              }
             >
-              {index === 0 ? "Now" : formatHour(hours[index].time, weather.timezone)}
+              {index === 0
+                ? "Now"
+                : formatHour(hours[index].time, weather.timezone)}
             </text>
           ))}
         </svg>
@@ -144,7 +152,6 @@ export default function TrendChart({ weather }) {
   );
 }
 
-/** Catmull-Rom style smoothing so the curve reads as a temperature trend. */
 function smoothPath(points) {
   if (points.length < 2) return "";
   let path = `M ${points[0][0]} ${points[0][1]}`;

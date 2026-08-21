@@ -1,18 +1,6 @@
 import { SCENE, weatherScene } from "./weatherCodes.js";
 import { parseLocalIso } from "./format.js";
 
-/**
- * Sky palettes.
- *
- * Each entry carries five colours rather than three: a deep zenith, two mid
- * bands, a horizon, and a light colour used for the glow and god rays. The
- * background composites them as overlapping radial gradients (a "mesh"), which
- * produces far softer transitions than a single linear ramp — real skies do
- * not have straight-line gradients.
- *
- * `grade` is a CSS filter applied to the whole sky for per-condition colour
- * grading, the way a film would be graded for a mood.
- */
 const PALETTES = {
   [`${SCENE.CLEAR}-day`]: {
     zenith: "#0a4da8",
@@ -175,11 +163,6 @@ const FALLBACK = {
   grade: "none",
 };
 
-/**
- * Which phase of the day it is at the *location*, using its own sunrise and
- * sunset. Dawn and dusk get their own palettes within an hour of the sun
- * crossing the horizon.
- */
 export function dayPhase(weather) {
   if (!weather?.current) return "day";
   const { isDay } = weather.current;
@@ -198,7 +181,6 @@ export function dayPhase(weather) {
   return isDay ? "day" : "night";
 }
 
-/** Resolve the palette for the current weather. */
 export function skyPalette(weather) {
   if (!weather?.current) return FALLBACK;
   const scene = weatherScene(weather.current.code);
@@ -206,14 +188,11 @@ export function skyPalette(weather) {
 
   return (
     PALETTES[`${scene}-${phase}`] ??
-    // dawn/dusk variants only exist for clear and cloudy; everything else
-    // falls back to its day or night entry.
     PALETTES[`${scene}-${phase === "night" ? "night" : "day"}`] ??
     FALLBACK
   );
 }
 
-/** Inline custom properties for the sky, applied to :root. */
 export function skyVariables(weather) {
   const palette = skyPalette(weather);
   return {
@@ -223,7 +202,6 @@ export function skyVariables(weather) {
     "--sky-horizon": palette.horizon,
     "--sky-light": palette.light,
     "--sky-grade": palette.grade,
-    // Kept for the pre-mount paint and any surface wanting a flat colour.
     "--sky-1": palette.zenith,
     "--sky-2": palette.lower,
     "--sky-3": palette.horizon,

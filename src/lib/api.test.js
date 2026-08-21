@@ -1,21 +1,32 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { fetchWeather, searchCities, reverseGeocode } from "./api.js";
-import { PLACE, forecastResponse, airQualityResponse, geocodeResponse }
-  from "../test/fixtures.js";
+import {
+  PLACE,
+  forecastResponse,
+  airQualityResponse,
+  geocodeResponse,
+} from "../test/fixtures.js";
 
 function mockFetch(handler) {
   globalThis.fetch = vi.fn((url) => Promise.resolve(handler(String(url))));
 }
 
-const ok = (body) =>
-  ({ ok: true, status: 200, json: () => Promise.resolve(body) });
+const ok = (body) => ({
+  ok: true,
+  status: 200,
+  json: () => Promise.resolve(body),
+});
 
 beforeEach(() => {
   mockFetch((url) => {
     if (url.includes("geocoding-api")) return ok(geocodeResponse());
     if (url.includes("air-quality-api")) return ok(airQualityResponse());
     if (url.includes("bigdatacloud")) {
-      return ok({ city: "London", countryName: "United Kingdom", countryCode: "GB" });
+      return ok({
+        city: "London",
+        countryName: "United Kingdom",
+        countryCode: "GB",
+      });
     }
     return ok(forecastResponse());
   });
@@ -110,7 +121,11 @@ describe("fetchWeather", () => {
   });
 
   it("surfaces a readable error on an HTTP failure", async () => {
-    mockFetch(() => ({ ok: false, status: 503, json: () => Promise.resolve({}) }));
+    mockFetch(() => ({
+      ok: false,
+      status: 503,
+      json: () => Promise.resolve({}),
+    }));
     await expect(fetchWeather(PLACE)).rejects.toThrow(/503/);
   });
 });

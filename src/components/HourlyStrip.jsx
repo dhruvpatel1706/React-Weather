@@ -3,7 +3,6 @@ import { degrees, formatHour } from "../lib/format.js";
 import { weatherLabel } from "../lib/weatherCodes.js";
 import "../styles/hourly.css";
 
-/** Next 24 hours, scrollable, with a temperature sparkline behind the row. */
 export default function HourlyStrip({ weather }) {
   const { hours, timezone } = weather;
   if (!hours?.length) return null;
@@ -14,7 +13,10 @@ export default function HourlyStrip({ weather }) {
   const span = max - min || 1;
 
   return (
-    <section className="hourly panel glass glass--refract rise" style={{ "--i": 1 }}>
+    <section
+      className="hourly panel glass glass--refract rise"
+      style={{ "--i": 1 }}
+    >
       <h2 className="eyebrow">Next 24 hours</h2>
       <div className="hourly__scroll scroll-x">
         <ul className="hourly__list">
@@ -41,7 +43,9 @@ export default function HourlyStrip({ weather }) {
                 ) : (
                   <span className="hourly__pop hourly__pop--empty" />
                 )}
-                <span className="hourly__temp">{degrees(hour.temperature)}</span>
+                <span className="hourly__temp">
+                  {degrees(hour.temperature)}
+                </span>
                 <span className="hourly__bar" aria-hidden="true">
                   <span
                     className="hourly__bar-fill"

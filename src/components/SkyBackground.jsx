@@ -4,14 +4,6 @@ import { dayPhase } from "../lib/sky.js";
 import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion.js";
 import "../styles/sky.css";
 
-/**
- * Animated sky. A CSS gradient supplies the base colour (driven by
- * --sky-* custom properties set on .app), and a single canvas draws whichever
- * particle system the current condition calls for.
- *
- * The canvas is skipped entirely when the user prefers reduced motion — the
- * gradient and glow alone still communicate the condition.
- */
 export default function SkyBackground({ weather }) {
   const canvasRef = useRef(null);
   const reducedMotion = usePrefersReducedMotion();
@@ -23,6 +15,15 @@ export default function SkyBackground({ weather }) {
   const showSun = scene === SCENE.CLEAR;
   const showRays =
     !isNight && (scene === SCENE.CLEAR || scene === SCENE.CLOUDS);
+
+  const windSpeed = weather?.current?.windSpeed ?? 0;
+  const windDirection = weather?.current?.windDirection ?? 0;
+  // Reported direction is where the wind blows *from*; particles travel the
+  // opposite bearing. Screen y grows downward, hence the negated cosine.
+  const bearingRad = ((windDirection + 180) % 360) * (Math.PI / 180);
+  const gust = Math.min(1, windSpeed / 60);
+  const windX = Math.sin(bearingRad) * gust;
+  const windY = -Math.cos(bearingRad) * gust;
 
   useEffect(() => {
     if (reducedMotion) return undefined;
@@ -54,7 +55,7 @@ export default function SkyBackground({ weather }) {
             y: random(0, height),
             len: random(12, 30),
             speed: random(11, 19),
-            drift: random(-1.6, -0.4),
+            drift: windX * random(6, 11) + random(-0.5, 0.5),
             alpha: random(0.18, 0.5),
           });
         }
@@ -66,7 +67,7 @@ export default function SkyBackground({ weather }) {
             y: random(0, height),
             len: random(5, 11),
             speed: random(5, 9),
-            drift: random(-0.8, -0.2),
+            drift: windX * random(3, 6) + random(-0.3, 0.3),
             alpha: random(0.14, 0.34),
           });
         }
@@ -79,6 +80,7 @@ export default function SkyBackground({ weather }) {
             r: random(1.2, 3.4),
             speed: random(0.5, 1.6),
             sway: random(0.4, 1.5),
+            drift: windX * random(1.4, 3),
             phase: random(0, Math.PI * 2),
             alpha: random(0.35, 0.9),
           });
@@ -101,18 +103,19 @@ export default function SkyBackground({ weather }) {
             x: random(-0.3, 1.1) * width,
             y: random(0.15, 0.9) * height,
             r: random(0.25, 0.6) * width,
-            speed: random(0.08, 0.28),
+            speed: random(0.08, 0.28) + Math.abs(windX) * 0.5,
+            dir: windX >= 0 ? 1 : -1,
             alpha: random(0.05, 0.13),
           });
         }
       } else {
-        // Clear or cloudy daytime: slow drifting cloud banks.
         for (let i = 0; i < 6; i += 1) {
           particles.push({
             x: random(-0.3, 1.1) * width,
             y: random(0.04, 0.55) * height,
             r: random(0.18, 0.42) * width,
-            speed: random(0.05, 0.2),
+            speed: random(0.05, 0.2) + Math.abs(windX) * 0.6,
+            dir: windX >= 0 ? 1 : -1,
             alpha: random(0.05, 0.14),
           });
         }
@@ -144,7 +147,8 @@ export default function SkyBackground({ weather }) {
           p.y = -p.len;
           p.x = random(0, width);
         }
-        if (p.x < -20) p.x = width + 20;
+        if (p.x < -30) p.x = width + 30;
+        if (p.x > width + 30) p.x = -30;
       }
     }
 
@@ -155,8 +159,8 @@ export default function SkyBackground({ weather }) {
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fill();
         p.phase += 0.012;
-        p.x += Math.sin(p.phase) * p.sway * 0.6;
-        p.y += p.speed;
+        p.x += Math.sin(p.phase) * p.sway * 0.6 + (p.drift ?? 0);
+        p.y += p.speed + windY * 0.4;
         if (p.y > height + 6) {
           p.y = -6;
           p.x = random(0, width);
@@ -184,8 +188,9 @@ export default function SkyBackground({ weather }) {
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fill();
-        p.x += p.speed;
-        if (p.x - p.r > width) p.x = -p.r;
+        p.x += p.speed * (p.dir ?? 1);
+        if (p.dir === -1 && p.x + p.r < 0) p.x = width + p.r;
+        if (p.dir !== -1 && p.x - p.r > width) p.x = -p.r;
       }
     }
 
@@ -231,10 +236,15 @@ export default function SkyBackground({ weather }) {
       observer?.disconnect();
       window.removeEventListener("resize", resize);
     };
-  }, [scene, isNight, reducedMotion]);
+  }, [scene, isNight, reducedMotion, windX, windY]);
 
   return (
-    <div className="sky" data-scene={scene} data-phase={phase} aria-hidden="true">
+    <div
+      className="sky"
+      data-scene={scene}
+      data-phase={phase}
+      aria-hidden="true"
+    >
       <div className="sky__mesh" />
       <div className="sky__haze" />
       {showRays && <div className="sky__rays" />}

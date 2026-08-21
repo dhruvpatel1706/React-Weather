@@ -1,9 +1,3 @@
-/**
- * Generates build/sw.js after `vite build`.
- * Hand-rolled rather than pulled from Workbox: the caching rules here are
- * simple, and keeping the dependency tree tiny is the whole point of this
- * rebuild.
- */
 import { readdirSync, statSync, writeFileSync, readFileSync } from "node:fs";
 import { join, relative } from "node:path";
 import { createHash } from "node:crypto";
@@ -23,7 +17,6 @@ const assets = walk(BUILD_DIR)
   .map((file) => `./${relative(BUILD_DIR, file).split("\\").join("/")}`)
   .filter((file) => !file.endsWith("sw.js"));
 
-// Version the cache by content so a new deploy invalidates the old one.
 const hash = createHash("sha256");
 for (const asset of assets.sort()) {
   hash.update(asset);
@@ -67,8 +60,6 @@ self.addEventListener("fetch", (event) => {
 
   const url = new URL(request.url);
 
-  // Weather data: network first, falling back to the last successful response
-  // so a cold offline launch still renders something real.
   if (/open-meteo\\.com|bigdatacloud\\.net/.test(url.hostname)) {
     event.respondWith(
       fetch(request)
@@ -82,7 +73,6 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Same-origin navigations: serve the app shell when offline.
   if (request.mode === "navigate") {
     event.respondWith(
       fetch(request).catch(() =>
@@ -94,13 +84,8 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Everything else in the shell: cache first.
-  //
-  // ignoreVary matters here. The precache was filled by cache.addAll(), whose
-  // requests carry different headers from the ones the page later issues for
-  // the same file. If the server sends a Vary header, a default match compares
-  // those headers and misses, so the asset falls through to the network and
-  // fails offline.
+  // ignoreVary: precached entries were fetched by addAll, whose request
+  // headers differ from the page's. A default match compares them and misses.
   if (url.origin === self.location.origin) {
     event.respondWith(
       caches
@@ -112,4 +97,6 @@ self.addEventListener("fetch", (event) => {
 `;
 
 writeFileSync(join(BUILD_DIR, "sw.js"), sw);
-console.log(`sw.js written — ${assets.length} shell assets, version ${version}`);
+console.log(
+  `sw.js written — ${assets.length} shell assets, version ${version}`
+);

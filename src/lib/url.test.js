@@ -10,7 +10,9 @@ const LONDON = {
 
 describe("placeFromUrl", () => {
   it("reads a shared location", () => {
-    const place = placeFromUrl("?lat=51.5085&lon=-0.1257&name=London&country=UK");
+    const place = placeFromUrl(
+      "?lat=51.5085&lon=-0.1257&name=London&country=UK"
+    );
     expect(place).toMatchObject({
       name: "London",
       country: "UK",

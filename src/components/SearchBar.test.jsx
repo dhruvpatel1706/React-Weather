@@ -6,7 +6,11 @@ import { geocodeResponse } from "../test/fixtures.js";
 
 beforeEach(() => {
   globalThis.fetch = vi.fn(() =>
-    Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(geocodeResponse()) })
+    Promise.resolve({
+      ok: true,
+      status: 200,
+      json: () => Promise.resolve(geocodeResponse()),
+    })
   );
 });
 
@@ -78,7 +82,11 @@ describe("SearchBar", () => {
 
   it("reports when nothing matches", async () => {
     globalThis.fetch = vi.fn(() =>
-      Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve({}) })
+      Promise.resolve({
+        ok: true,
+        status: 200,
+        json: () => Promise.resolve({}),
+      })
     );
     const { input } = setup();
     await userEvent.type(input, "Zzzzzz");
@@ -87,7 +95,9 @@ describe("SearchBar", () => {
 
   it("triggers the geolocation flow", async () => {
     const { onLocate } = setup();
-    await userEvent.click(screen.getByRole("button", { name: /use my location/i }));
+    await userEvent.click(
+      screen.getByRole("button", { name: /use my location/i })
+    );
     expect(onLocate).toHaveBeenCalled();
   });
 });

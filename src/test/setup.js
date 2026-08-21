@@ -8,7 +8,6 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-// jsdom implements neither of these, and the animated background needs both.
 globalThis.matchMedia ??= (query) => ({
   matches: false,
   media: query,

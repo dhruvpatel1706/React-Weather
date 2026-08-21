@@ -1,11 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion.js";
 
-/**
- * Animates between integer values by counting, rather than cutting. Used for
- * the hero temperature so switching city or units reads as a transition
- * instead of a jump.
- */
 export default function RollingNumber({ value, duration = 620 }) {
   const [display, setDisplay] = useState(value);
   const fromRef = useRef(value);
@@ -24,7 +19,6 @@ export default function RollingNumber({ value, duration = 620 }) {
 
     const step = (now) => {
       const t = Math.min(1, (now - start) / duration);
-      // Ease-out cubic: fast to settle, no overshoot on a numeric readout.
       const eased = 1 - (1 - t) ** 3;
       setDisplay(Math.round(from + (value - from) * eased));
       if (t < 1) {

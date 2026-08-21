@@ -1,14 +1,3 @@
-/**
- * SVG filter definitions used by the glass material.
- *
- * `#glass-warp` is the important one: fed through `backdrop-filter: url(...)`
- * it displaces the pixels *behind* an element, so the sky genuinely bends as
- * it passes through the panel instead of merely blurring. The turbulence is
- * low-frequency and the displacement scale is small, which reads as thick
- * glass rather than as noise.
- *
- * Rendered once, hidden, at the app root.
- */
 export default function GlassFilters() {
   return (
     <svg className="glass-filters" aria-hidden="true" focusable="false">
@@ -32,7 +21,13 @@ export default function GlassFilters() {
         </filter>
 
         {/* Stronger warp for the edge lens ring. */}
-        <filter id="glass-warp-edge" x="-30%" y="-30%" width="160%" height="160%">
+        <filter
+          id="glass-warp-edge"
+          x="-30%"
+          y="-30%"
+          width="160%"
+          height="160%"
+        >
           <feTurbulence
             type="fractalNoise"
             baseFrequency="0.014 0.02"

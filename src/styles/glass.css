@@ -1,20 +1,3 @@
-/* ==========================================================================
-   Liquid glass material
-   --------------------------------------------------------------------------
-   Built in five layers, painted back to front:
-
-     1. backdrop      — blur + saturate + a displacement warp, so the sky
-                        actually refracts through the panel
-     2. tint          — the translucent body of the glass
-     3. edge lens     — a ring where light bends hardest, with chromatic
-                        fringing (warm outside, cool inside), like a real bevel
-     4. specular      — a moving highlight that tracks the pointer
-     5. depth         — stacked ambient + contact shadows, plus an inner glow
-
-   Everything keys off --mx/--my (pointer position, 0–1) which useGlassPointer
-   writes onto each surface.
-   ========================================================================== */
-
 .glass-filters {
   position: absolute;
   width: 0;
@@ -34,17 +17,13 @@
     inset 0 1px 0 0 var(--glass-specular),
     inset 0 0 24px -6px rgba(255, 255, 255, 0.18);
   backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate))
-    brightness(1.02);
+    brightness(0.98);
   -webkit-backdrop-filter: blur(var(--glass-blur))
-    saturate(var(--glass-saturate)) brightness(1.02);
+    saturate(var(--glass-saturate)) brightness(0.98);
   isolation: isolate;
   transform-style: preserve-3d;
 }
 
-/* Layer 3 — edge lens.
-   A 1.5px ring carrying a warm/cool split: the outer face picks up warm light,
-   the inner face throws cool. That split is what sells "thick glass" instead
-   of "1px white border". */
 .glass::before {
   content: "";
   position: absolute;
@@ -72,7 +51,6 @@
   opacity: 0.9;
 }
 
-/* Layer 4 — specular highlight tracking the pointer. */
 .glass::after {
   content: "";
   position: absolute;
@@ -101,34 +79,31 @@
   z-index: 4;
 }
 
-/* Refraction. Kept on its own class so it can be switched off wholesale where
-   it is too expensive (long lists) or unsupported. */
+/* Displacement warp is opt-in: it is the expensive part of the material. */
 .glass--refract {
   backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate))
-    brightness(1.02) url(#glass-warp);
+    brightness(0.98) url(#glass-warp);
   -webkit-backdrop-filter: blur(var(--glass-blur))
-    saturate(var(--glass-saturate)) brightness(1.02) url(#glass-warp);
+    saturate(var(--glass-saturate)) brightness(0.98) url(#glass-warp);
 }
 
 .glass--strong {
   background: var(--glass-fill-strong);
   backdrop-filter: blur(var(--glass-blur-heavy)) saturate(var(--glass-saturate))
-    brightness(1.03);
+    brightness(0.96);
   -webkit-backdrop-filter: blur(var(--glass-blur-heavy))
-    saturate(var(--glass-saturate)) brightness(1.03);
+    saturate(var(--glass-saturate)) brightness(0.96);
 }
 
-/* Thin, bright glass for pills and controls. */
 .glass--thin {
   background: var(--glass-fill-thin);
-  backdrop-filter: blur(20px) saturate(150%) brightness(1.04);
-  -webkit-backdrop-filter: blur(20px) saturate(150%) brightness(1.04);
+  backdrop-filter: blur(22px) saturate(150%) brightness(0.98);
+  -webkit-backdrop-filter: blur(22px) saturate(150%) brightness(0.98);
   box-shadow:
     0 8px 24px -8px rgba(4, 10, 24, 0.4),
     inset 0 1px 0 0 var(--glass-specular);
 }
 
-/* Interactive surfaces lift and brighten, and tilt toward the pointer. */
 .glass--interactive {
   transition:
     background var(--dur) var(--ease-out),
@@ -151,18 +126,15 @@
   transition-duration: var(--dur-fast);
 }
 
-/* Pointer tilt: a shallow 3D rotation toward the cursor. The rotation is
-   deliberately small — enough to catch the light, not enough to distort text. */
 .glass--tilt {
-  transform: perspective(1400px)
-    rotateX(calc((var(--my) - 0.5) * -5deg))
+  transform: perspective(1400px) rotateX(calc((var(--my) - 0.5) * -5deg))
     rotateY(calc((var(--mx) - 0.5) * 7deg));
   transition: transform 420ms var(--ease-out);
 }
 
-/* Fallbacks ------------------------------------------------------------- */
-
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+@supports not (
+  (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+) {
   .glass {
     background: rgba(16, 28, 50, 0.86);
   }

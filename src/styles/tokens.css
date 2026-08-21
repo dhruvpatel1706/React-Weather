@@ -1,29 +1,16 @@
-/* ==========================================================================
-   Liquid glass design tokens
-   The glass look is built from four stacked ingredients:
-     1. a translucent tint          (--glass-fill)
-     2. a heavy backdrop blur + saturation boost
-     3. a hairline edge that catches light  (--glass-edge)
-     4. an inner specular highlight along the top edge
-   Sky colours are driven at runtime by the current condition + time of day;
-   the palette below is the neutral fallback.
-   ========================================================================== */
-
 :root {
   color-scheme: dark;
 
-  /* Sky — overwritten inline by <SkyBackground> per condition */
   --sky-1: #0b1a33;
   --sky-2: #1b3a63;
   --sky-3: #3d6491;
   --sky-glow: rgba(255, 255, 255, 0.16);
 
-  /* Glass surfaces, in ascending order of prominence */
-  --glass-fill: rgba(255, 255, 255, 0.09);
-  --glass-fill-strong: rgba(255, 255, 255, 0.15);
-  --glass-fill-thin: rgba(255, 255, 255, 0.13);
-  --topbar-fill: rgba(18, 32, 58, 0.55);
-  --glass-fill-hover: rgba(255, 255, 255, 0.19);
+  --glass-fill: rgba(10, 22, 44, 0.34);
+  --glass-fill-strong: rgba(8, 18, 38, 0.46);
+  --glass-fill-thin: rgba(10, 22, 44, 0.3);
+  --topbar-fill: rgba(8, 18, 38, 0.52);
+  --glass-fill-hover: rgba(14, 30, 58, 0.46);
   --glass-edge: rgba(255, 255, 255, 0.22);
   --glass-edge-strong: rgba(255, 255, 255, 0.38);
   --glass-specular: rgba(255, 255, 255, 0.55);
@@ -31,25 +18,21 @@
   --glass-blur-heavy: 46px;
   --glass-saturate: 155%;
 
-  /* Ink */
   --ink: rgba(255, 255, 255, 0.98);
   --ink-soft: rgba(255, 255, 255, 0.76);
   --ink-faint: rgba(255, 255, 255, 0.52);
   --ink-ghost: rgba(255, 255, 255, 0.32);
 
-  /* Shadows: broad ambient + tight contact, the way real glass sits */
   --shadow-ambient: 0 24px 60px -12px rgba(4, 10, 24, 0.55);
   --shadow-contact: 0 2px 6px -1px rgba(4, 10, 24, 0.35);
   --shadow-lift: 0 32px 80px -16px rgba(4, 10, 24, 0.65);
 
-  /* Radii — iOS-style continuous curvature */
   --r-sm: 14px;
   --r-md: 22px;
   --r-lg: 30px;
   --r-xl: 38px;
   --r-pill: 999px;
 
-  /* Spacing */
   --sp-1: 4px;
   --sp-2: 8px;
   --sp-3: 12px;
@@ -58,7 +41,6 @@
   --sp-6: 30px;
   --sp-7: 42px;
 
-  /* Semantic accents */
   --accent-low: #4ade80;
   --accent-moderate: #fbbf24;
   --accent-high: #fb923c;
@@ -67,19 +49,25 @@
   --accent-cool: #7dd3fc;
   --accent-warm: #fda4af;
 
-  /* Motion — iOS spring-ish easing */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --dur-fast: 180ms;
   --dur: 320ms;
   --dur-slow: 620ms;
 
-  --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI",
-    system-ui, "Helvetica Neue", Arial, sans-serif;
+  --font:
+    "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter Variable",
+    "Segoe UI Variable Display", system-ui, sans-serif;
+  --font-text:
+    "SF Pro Text", -apple-system, BlinkMacSystemFont, "Inter Variable",
+    "Segoe UI Variable Text", system-ui, sans-serif;
+
+  --tracking-display: -0.022em;
+  --tracking-tight: -0.014em;
+  --tracking-normal: -0.006em;
+  --tracking-caps: 0.06em;
 }
 
-/* Light mode keeps the same recipe with the polarity flipped: the tint goes
-   bright-neutral and the ink goes dark, so glass over a pale sky stays legible. */
 @media (prefers-color-scheme: light) {
   :root:not([data-theme="dark"]) {
     color-scheme: light;
@@ -98,9 +86,6 @@
     --shadow-ambient: 0 24px 60px -14px rgba(24, 46, 82, 0.28);
     --shadow-contact: 0 2px 6px -1px rgba(24, 46, 82, 0.18);
     --shadow-lift: 0 32px 80px -18px rgba(24, 46, 82, 0.34);
-    /* Accents are re-darkened for light mode: the dark-theme values are tuned
-       for white text on a deep sky and drop below readable contrast once the
-       background goes bright. */
     --accent-low: #15803d;
     --accent-moderate: #b45309;
     --accent-high: #c2410c;
@@ -128,9 +113,6 @@
   --shadow-ambient: 0 24px 60px -14px rgba(24, 46, 82, 0.28);
   --shadow-contact: 0 2px 6px -1px rgba(24, 46, 82, 0.18);
   --shadow-lift: 0 32px 80px -18px rgba(24, 46, 82, 0.34);
-  /* Accents are re-darkened for light mode: the dark-theme values are tuned
-     for white text on a deep sky and drop below readable contrast once the
-     background goes bright. */
   --accent-low: #15803d;
   --accent-moderate: #b45309;
   --accent-high: #c2410c;

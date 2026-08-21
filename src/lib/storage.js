@@ -1,5 +1,3 @@
-/** localStorage helpers that degrade gracefully in private mode / SSR. */
-
 const CITIES_KEY = "rw.savedCities.v2";
 const UNITS_KEY = "rw.units.v2";
 const LAST_KEY = "rw.lastWeather.v2";
@@ -40,7 +38,6 @@ export function saveUnits(units) {
   return write(UNITS_KEY, units);
 }
 
-/** Cached last-known weather, so a cold offline launch still shows something. */
 export function loadLastWeather() {
   return read(LAST_KEY, null);
 }

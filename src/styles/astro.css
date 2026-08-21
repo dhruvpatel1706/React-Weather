@@ -4,7 +4,6 @@
   letter-spacing: -0.02em;
 }
 
-/* Moon: lit disc with an arc-built terminator (see AstroTiles.jsx). */
 .moon {
   width: 46px;
   height: 46px;
@@ -32,7 +31,6 @@
   stroke-width: 1;
 }
 
-/* Pollen */
 .pollen {
   margin: var(--sp-2) 0 0;
   padding: 0;

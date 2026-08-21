@@ -7,10 +7,6 @@
   margin: 0 auto;
 }
 
-/* Content scrolls beneath this bar, so the material has to be substantial
-   enough to reduce whatever passes behind it to an indistinct wash — a light
-   blur alone leaves bold headings legible and the overlap reads as a
-   collision rather than as layering. */
 .topbar__inner {
   background: var(--topbar-fill);
   backdrop-filter: blur(40px) saturate(160%);
@@ -23,7 +19,6 @@
   transition: box-shadow var(--dur) var(--ease-out);
 }
 
-/* Identity block collapses to zero width until the hero is out of view. */
 .topbar__identity {
   display: flex;
   align-items: center;
@@ -72,9 +67,6 @@
   }
 }
 
-/* On narrow screens the units toggle plus two icon buttons leave the search
-   field too little room to show its placeholder, so give search its own row
-   and drop the controls beneath it. */
 @media (max-width: 620px) {
   .topbar {
     padding: var(--sp-2) var(--sp-3);
@@ -100,8 +92,6 @@
     justify-self: end;
   }
 
-  /* The identity block reappears here once the hero scrolls away, filling the
-     space beside the controls rather than being hidden outright. */
   .topbar__identity {
     display: flex;
     grid-area: identity;

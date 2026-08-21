@@ -1,3 +1,4 @@
+@import "./fonts.css";
 @import "./tokens.css";
 @import "./glass.css";
 
@@ -20,7 +21,16 @@ body,
 
 body {
   margin: 0;
-  font-family: var(--font);
+  font-family: var(--font-text);
+  font-optical-sizing: auto;
+  font-synthesis-weight: none;
+  font-feature-settings:
+    "cv05" 1,
+    "cv08" 1,
+    "cv11" 1,
+    "ss03" 1;
+  font-variant-numeric: lining-nums proportional-nums;
+  letter-spacing: var(--tracking-normal);
   color: var(--ink);
   background: var(--sky-zenith, #061229);
   -webkit-font-smoothing: antialiased;
@@ -48,10 +58,6 @@ input {
   border-radius: var(--r-sm);
 }
 
-/* --------------------------------------------------------------------------
-   Shell
-   -------------------------------------------------------------------------- */
-
 .app {
   position: relative;
   min-height: 100%;
@@ -70,9 +76,6 @@ input {
   flex: 1;
 }
 
-/* The sheet is the scrollable body of content that rides up over the hero.
-   Its own translucent backdrop separates it from the sky without boxing every
-   child in its own panel. */
 .sheet {
   position: relative;
   display: flex;
@@ -84,9 +87,9 @@ input {
   border-radius: var(--r-xl) var(--r-xl) 0 0;
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.07) 0%,
-    rgba(255, 255, 255, 0.035) 42%,
-    rgba(255, 255, 255, 0.02) 100%
+    rgba(6, 16, 34, 0.28) 0%,
+    rgba(6, 16, 34, 0.16) 42%,
+    rgba(6, 16, 34, 0.1) 100%
   );
   border-top: 1px solid var(--glass-edge);
   box-shadow: 0 -20px 60px -24px rgba(2, 6, 16, 0.6);
@@ -156,14 +159,10 @@ input {
   font-weight: 600;
 }
 
-/* --------------------------------------------------------------------------
-   Shared bits
-   -------------------------------------------------------------------------- */
-
 .eyebrow {
   font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
+  font-weight: 650;
+  letter-spacing: var(--tracking-caps);
   text-transform: uppercase;
   color: var(--ink-faint);
   margin: 0;
@@ -215,8 +214,6 @@ input {
   border: 0;
 }
 
-/* Horizontal scrollers fade at the trailing edge, so a clipped final item
-   reads as "there is more" rather than as a layout bug. */
 .scroll-x {
   overflow-x: auto;
   scrollbar-width: thin;
@@ -249,7 +246,6 @@ input {
   border-radius: var(--r-pill);
 }
 
-/* Staggered entrance, ordered by --i. */
 @keyframes rise {
   from {
     opacity: 0;
@@ -277,4 +273,21 @@ input {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.hero__temp,
+.tile__value,
+.dial__centre-top,
+.dial__centre-bottom,
+.hourly__temp,
+.daily__hi,
+.daily__lo,
+.topbar__temp {
+  font-variant-numeric: tabular-nums lining-nums;
 }

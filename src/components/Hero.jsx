@@ -7,15 +7,10 @@ import {
   formatTime,
   placeLabel,
   tempUnit,
+  temperatureTint,
 } from "../lib/format.js";
 import "../styles/hero.css";
 
-/**
- * Full-bleed hero. Deliberately has no glass panel behind it: the type sits
- * directly on the sky, which is what makes the composition feel like weather
- * rather than like a dashboard. Legibility comes from a text shadow and the
- * vignette above, not from a card.
- */
 export default function Hero({
   weather,
   saved,
@@ -27,6 +22,7 @@ export default function Hero({
   const { current, place, timezone, units, days, yesterday } = weather;
   const today = days?.[0];
   const comparison = compareToYesterday(today, yesterday);
+  const [tintFrom, tintTo] = temperatureTint(current.temperature, units);
 
   return (
     <section className="hero">
@@ -61,47 +57,55 @@ export default function Hero({
       </div>
 
       <div className="hero__lower">
-      <div className="hero__reading">
-        <div className="hero__temp-wrap">
-          <p className="hero__temp">
-            <RollingNumber value={Math.round(current.temperature ?? 0)} />
-            <span className="hero__deg">°</span>
-            <span className="hero__unit">{tempUnit(units).replace("°", "")}</span>
+        <div className="hero__reading">
+          <div className="hero__temp-wrap">
+            <p
+              className="hero__temp"
+              style={{ "--tint-from": tintFrom, "--tint-to": tintTo }}
+            >
+              <RollingNumber value={Math.round(current.temperature ?? 0)} />
+              <span className="hero__deg">°</span>
+              <span className="hero__unit">
+                {tempUnit(units).replace("°", "")}
+              </span>
+            </p>
+            <WeatherIcon
+              code={current.code}
+              isDay={current.isDay}
+              size={116}
+              className="hero__icon"
+              title={weatherLabel(current.code)}
+            />
+          </div>
+
+          <p className="hero__condition">{weatherLabel(current.code)}</p>
+
+          <p className="hero__meta">
+            <span className="hero__hi">H {degrees(today?.max)}</span>
+            <span className="hero__dot" />
+            <span className="hero__lo">L {degrees(today?.min)}</span>
+            <span className="hero__dot" />
+            <span>Feels {degrees(current.feelsLike)}</span>
           </p>
-          <WeatherIcon
-            code={current.code}
-            isDay={current.isDay}
-            size={116}
-            className="hero__icon"
-            title={weatherLabel(current.code)}
-          />
+
+          <p className="hero__date">
+            {formatFullDate(current.time, timezone)} ·{" "}
+            {formatTime(current.time, timezone)}
+          </p>
         </div>
 
-        <p className="hero__condition">{weatherLabel(current.code)}</p>
-
-        <p className="hero__meta">
-          <span className="hero__hi">H {degrees(today?.max)}</span>
-          <span className="hero__dot" />
-          <span className="hero__lo">L {degrees(today?.min)}</span>
-          <span className="hero__dot" />
-          <span>Feels {degrees(current.feelsLike)}</span>
+        <p className="hero__recommendation">
+          {recommendation(current.code, current.isDay)}
+          {comparison ? (
+            <span className="hero__compare"> {comparison}</span>
+          ) : null}
         </p>
 
-        <p className="hero__date">
-          {formatFullDate(current.time, timezone)} · {formatTime(current.time, timezone)}
-        </p>
-      </div>
-
-      <p className="hero__recommendation">
-        {recommendation(current.code, current.isDay)}
-        {comparison ? <span className="hero__compare"> {comparison}</span> : null}
-      </p>
-
-      {stale && (
-        <p className="hero__stale" role="status">
-          Offline — showing your last saved reading
-        </p>
-      )}
+        {stale && (
+          <p className="hero__stale" role="status">
+            Offline — showing your last saved reading
+          </p>
+        )}
       </div>
 
       <div className="hero__scroll-cue" aria-hidden="true">
@@ -111,7 +115,6 @@ export default function Hero({
   );
 }
 
-/** "3° warmer than yesterday" — compares today's high with yesterday's. */
 export function compareToYesterday(today, yesterday) {
   if (today?.max == null || yesterday?.max == null) return "";
   const delta = Math.round(today.max - yesterday.max);
@@ -132,7 +135,11 @@ const StarGlyph = ({ filled }) => (
 );
 
 const RefreshGlyph = ({ spinning }) => (
-  <svg viewBox="0 0 24 24" aria-hidden="true" className={spinning ? "is-spinning" : ""}>
+  <svg
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+    className={spinning ? "is-spinning" : ""}
+  >
     <path
       d="M20 12a8 8 0 1 1-2.6-5.9M20 4v4h-4"
       fill="none"

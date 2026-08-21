@@ -1,9 +1,3 @@
-/**
- * WMO 4677 weather interpretation codes, as returned by Open-Meteo.
- * Each code maps to a human label, an icon key, a scene key (which drives the
- * animated background), and a recommendation shown on the hero card.
- */
-
 export const SCENE = {
   CLEAR: "clear",
   CLOUDS: "clouds",

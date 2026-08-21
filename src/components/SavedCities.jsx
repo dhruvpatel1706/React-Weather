@@ -1,12 +1,15 @@
 import { placeLabel } from "../lib/format.js";
 import "../styles/saved.css";
 
-/** Pinned cities as glass pills. */
 export default function SavedCities({ cities, activeId, onSelect, onRemove }) {
   if (!cities.length) return null;
 
   return (
-    <section className="saved rise" style={{ "--i": 3 }} aria-label="Saved cities">
+    <section
+      className="saved rise"
+      style={{ "--i": 3 }}
+      aria-label="Saved cities"
+    >
       <h2 className="eyebrow saved__title">Saved</h2>
       <ul className="saved__list scroll-x">
         {cities.map((city) => (

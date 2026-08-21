@@ -55,7 +55,6 @@
   text-align: right;
 }
 
-/* Range bar: positioned within the whole week's low→high span. */
 .daily__track {
   position: relative;
   height: 5px;
@@ -81,5 +80,135 @@
   .daily__row {
     grid-template-columns: 46px 28px 30px 34px 1fr 34px;
     gap: 6px;
+  }
+}
+
+.daily__item + .daily__item {
+  border-top: 1px solid var(--glass-edge);
+}
+
+.daily__row {
+  width: 100%;
+  text-align: left;
+  grid-template-columns: 56px 34px 36px 40px 1fr 40px 20px;
+}
+
+.daily__chevron {
+  display: grid;
+  place-items: center;
+  color: var(--ink-ghost);
+}
+
+.daily__chevron svg {
+  width: 16px;
+  height: 16px;
+  transition: transform var(--dur) var(--ease-out);
+}
+
+.daily__item.is-open .daily__chevron svg {
+  transform: rotate(180deg);
+}
+
+.daily__item.is-open {
+  background: var(--glass-fill);
+  border-radius: var(--r-md);
+}
+
+.daily__detail {
+  padding: 0 var(--sp-3) var(--sp-4);
+  animation: daily-open 340ms var(--ease-out);
+}
+
+@keyframes daily-open {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+.daily__summary {
+  margin: 0 0 var(--sp-3);
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+.daily__facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
+  gap: var(--sp-3);
+  margin: 0 0 var(--sp-4);
+}
+
+.daily__facts div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.daily__facts dt {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-ghost);
+}
+
+.daily__facts dd {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.daily__hours {
+  display: flex;
+  gap: var(--sp-1);
+  margin: 0;
+  padding: 0 0 var(--sp-2);
+  list-style: none;
+}
+
+.daily__hour {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: none;
+  width: 52px;
+  padding: var(--sp-2) 0;
+  border-radius: var(--r-sm);
+  background: var(--glass-fill);
+}
+
+.daily__hour-time {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+
+.daily__hour-temp {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.daily__hour-pop {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--accent-cool);
+  min-height: 12px;
+}
+
+.daily__no-hours {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--ink-ghost);
+}
+
+@media (max-width: 480px) {
+  .daily__row {
+    grid-template-columns: 44px 26px 30px 32px 1fr 32px 16px;
+    gap: 5px;
   }
 }

@@ -18,9 +18,9 @@ describe("dayPhase", () => {
   });
 
   it("falls back to the is_day flag without sun times", () => {
-    expect(dayPhase({ current: { code: 0, isDay: false, time: "x" }, days: [] })).toBe(
-      "night"
-    );
+    expect(
+      dayPhase({ current: { code: 0, isDay: false, time: "x" }, days: [] })
+    ).toBe("night");
   });
 });
 
@@ -40,7 +40,9 @@ describe("skyPalette", () => {
     // Guards against a mistyped colour silently breaking a whole condition.
     for (const [key, palette] of Object.entries(PALETTES)) {
       for (const stop of STOPS) {
-        expect(isHex(palette[stop]), `${key}.${stop} = ${palette[stop]}`).toBe(true);
+        expect(isHex(palette[stop]), `${key}.${stop} = ${palette[stop]}`).toBe(
+          true
+        );
       }
     }
   });

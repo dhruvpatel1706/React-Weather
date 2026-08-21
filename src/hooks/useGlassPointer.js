@@ -1,14 +1,6 @@
 import { useEffect, useRef } from "react";
 import { usePrefersReducedMotion } from "./usePrefersReducedMotion.js";
 
-/**
- * Writes normalised pointer coordinates (--mx/--my, each 0–1) onto a surface
- * so the glass specular highlight and tilt can follow the cursor.
- *
- * Updates are coalesced into an animation frame — pointermove fires far more
- * often than the screen refreshes, and writing a custom property on every
- * event forces needless style recalculation.
- */
 export function useGlassPointer() {
   const ref = useRef(null);
   const reducedMotion = usePrefersReducedMotion();
@@ -16,7 +8,6 @@ export function useGlassPointer() {
   useEffect(() => {
     const node = ref.current;
     if (!node || reducedMotion) return undefined;
-    // Coarse pointers have no hover position to track.
     if (window.matchMedia?.("(pointer: coarse)").matches) return undefined;
 
     let frame = 0;

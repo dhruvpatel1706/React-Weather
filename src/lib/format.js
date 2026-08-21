@@ -1,5 +1,3 @@
-/** Formatting helpers. All date/number work uses Intl — no date library. */
-
 export function degrees(value) {
   if (value == null || Number.isNaN(value)) return "--";
   return `${Math.round(value)}°`;
@@ -20,7 +18,6 @@ export function distanceFrom(metres, units) {
     : `${(metres / 1000).toFixed(1)} km`;
 }
 
-/** Format an Open-Meteo local-time string in the *location's* timezone. */
 export function formatTime(iso, timezone, options = {}) {
   if (!iso) return "--";
   const date = parseLocalIso(iso);
@@ -59,16 +56,13 @@ export function formatFullDate(iso, timezone) {
   }).format(date);
 }
 
-/**
- * Open-Meteo returns wall-clock strings already in the location's timezone,
- * either as a date ("2026-08-21") or a date-time ("2026-08-21T14:00").
- * Normalising both to a UTC instant and formatting back in that same zone
- * round-trips the wall clock without the host timezone interfering.
- */
+// Open-Meteo returns wall-clock strings already in the location's zone.
+// Reading them as UTC and formatting back in that zone round-trips the clock.
 function parseLocalIso(iso) {
   if (typeof iso !== "string") return new Date(iso);
   if (/^\d{4}-\d{2}-\d{2}$/.test(iso)) return new Date(`${iso}T00:00:00Z`);
-  if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(iso)) return new Date(`${iso}:00Z`);
+  if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(iso))
+    return new Date(`${iso}:00Z`);
   if (/Z$|[+-]\d{2}:\d{2}$/.test(iso)) return new Date(iso);
   return new Date(`${iso}Z`);
 }
@@ -83,8 +77,22 @@ export function placeLabel(place) {
 export function compassDirection(degreesValue) {
   if (degreesValue == null) return "--";
   const points = [
-    "N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE",
-    "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW",
+    "N",
+    "NNE",
+    "NE",
+    "ENE",
+    "E",
+    "ESE",
+    "SE",
+    "SSE",
+    "S",
+    "SSW",
+    "SW",
+    "WSW",
+    "W",
+    "WNW",
+    "NW",
+    "NNW",
   ];
   return points[Math.round(degreesValue / 22.5) % 16];
 }
@@ -119,4 +127,24 @@ export function humidityDescriptor(humidity) {
   if (humidity < 30) return "Dry air";
   if (humidity > 70) return "Feels muggy";
   return "Comfortable";
+}
+
+export function temperatureTint(value, units = "metric") {
+  if (value == null || Number.isNaN(value)) {
+    return ["#ffffff", "#dbe7f5"];
+  }
+  const celsius = units === "imperial" ? ((value - 32) * 5) / 9 : value;
+  const stops = [
+    [-10, "#bcdcff", "#5aa9f0"],
+    [2, "#d8ecff", "#8fc3ee"],
+    [11, "#eef6fd", "#c2d9ee"],
+    [21, "#ffffff", "#e3ecf7"],
+    [27, "#fff4e6", "#ffd3ab"],
+    [33, "#ffe6d4", "#ffa67f"],
+    [39, "#ffd9d2", "#ff806e"],
+  ];
+  for (const [threshold, from, to] of stops) {
+    if (celsius <= threshold) return [from, to];
+  }
+  return ["#ffcfc9", "#ff5f52"];
 }

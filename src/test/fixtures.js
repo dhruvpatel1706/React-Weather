@@ -1,8 +1,3 @@
-/**
- * Open-Meteo-shaped fixtures used by unit tests and the visual QA harness.
- * Generated rather than hand-written so the arrays stay internally consistent.
- */
-
 export const PLACE = {
   id: "51.508,-0.126",
   name: "London",
@@ -32,10 +27,6 @@ function isoDay(dayOffset) {
   )}`;
 }
 
-/**
- * Builds a full forecast payload.
- * `code` sets the current condition so the harness can render every scene.
- */
 export function forecastResponse({ code = 61, isDay = 1, hour = 14 } = {}) {
   const hourlyTime = [];
   const temperature = [];
@@ -47,11 +38,9 @@ export function forecastResponse({ code = 61, isDay = 1, hour = 14 } = {}) {
   const visibility = [];
   const dewPoint = [];
 
-  // past_days=1 → start a day early, matching the real API.
   for (let day = -1; day <= 9; day += 1) {
     for (let h = 0; h < 24; h += 1) {
       hourlyTime.push(isoHour(day, h));
-      // Smooth diurnal curve peaking mid-afternoon.
       const curve = Math.sin(((h - 6) / 24) * Math.PI * 2);
       temperature.push(Number((16 + curve * 6 + day * 0.4).toFixed(1)));
       weatherCode.push(h % 7 === 0 ? 3 : h % 5 === 0 ? 61 : 2);
@@ -92,7 +81,6 @@ export function forecastResponse({ code = 61, isDay = 1, hour = 14 } = {}) {
     popMax.push(30 + ((day * 13) % 60));
     windMax.push(14 + ((day * 5) % 18));
     precipSum.push(Number((Math.abs(Math.sin(day)) * 4).toFixed(1)));
-    // Shrinking daylight, so the "shorter than yesterday" copy has something to say.
     daylight.push(49200 - day * 120);
     windDir.push((200 + day * 20) % 360);
   }
@@ -107,8 +95,9 @@ export function forecastResponse({ code = 61, isDay = 1, hour = 14 } = {}) {
     minutelyTime.push(
       `${isoDay(day)}T${pad(Math.floor(minuteOfDay / 60))}:${pad(minuteOfDay % 60)}`
     );
-    // Dry for ~45 minutes, then a burst of rain, then easing off.
-    minutelyPrecip.push(i < 3 ? 0 : i < 12 ? Number((0.3 + (i % 4) * 0.35).toFixed(2)) : 0);
+    minutelyPrecip.push(
+      i < 3 ? 0 : i < 12 ? Number((0.3 + (i % 4) * 0.35).toFixed(2)) : 0
+    );
     minutelyCode.push(i >= 3 && i < 12 ? 61 : 2);
   }
 

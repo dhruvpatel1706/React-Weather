@@ -56,8 +56,6 @@
   letter-spacing: -0.02em;
 }
 
-/* Sparkline: each hour's bar height encodes its temperature within the
-   24-hour min/max, giving the strip a readable silhouette. */
 .hourly__bar {
   display: block;
   width: 4px;
@@ -73,9 +71,5 @@
   display: block;
   width: 100%;
   border-radius: var(--r-pill);
-  background: linear-gradient(
-    to top,
-    var(--accent-cool),
-    var(--accent-warm)
-  );
+  background: linear-gradient(to top, var(--accent-cool), var(--accent-warm));
 }

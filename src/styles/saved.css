@@ -41,7 +41,9 @@
   height: 22px;
   border-radius: var(--r-pill);
   color: var(--ink-ghost);
-  transition: color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out);
 }
 
 .saved__remove svg {

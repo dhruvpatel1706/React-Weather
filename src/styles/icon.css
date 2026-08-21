@@ -1,26 +1,28 @@
-/* Weather icon glyphs. Strokes/fills inherit from currentColor where possible
-   so icons tint correctly on any glass surface. */
-
 .wx {
   display: block;
   overflow: visible;
-}
-
-/* Sun */
-.wx-sun__core {
-  fill: #ffd54a;
-  filter: drop-shadow(0 0 7px rgba(255, 205, 74, 0.65));
-}
-
-.wx-sun__ray {
-  stroke: #ffd54a;
-  stroke-width: 2.6;
-  stroke-linecap: round;
+  filter: drop-shadow(0 3px 8px rgba(6, 14, 32, 0.28));
 }
 
 .wx-sun {
-  transform-origin: 24px 24px;
-  animation: wx-spin 26s linear infinite;
+  transform-origin: 24px 23px;
+}
+
+.wx-sun__rays {
+  transform-origin: 24px 23px;
+  animation: wx-spin 34s linear infinite;
+}
+
+.wx-sun__ray {
+  stroke: #ffd93d;
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  opacity: 0.92;
+}
+
+.wx-sun__core {
+  animation: wx-breathe 5.5s ease-in-out infinite;
+  transform-origin: 24px 23px;
 }
 
 @keyframes wx-spin {
@@ -29,22 +31,23 @@
   }
 }
 
-/* Moon */
+@keyframes wx-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.045);
+  }
+}
+
 .wx-moon {
-  fill: #e9eefb;
-  filter: drop-shadow(0 0 7px rgba(200, 220, 255, 0.55));
+  animation: wx-breathe 7s ease-in-out infinite;
+  transform-origin: 27px 23px;
 }
 
-/* Clouds */
 .wx-cloud {
-  fill: rgba(255, 255, 255, 0.94);
-  filter: drop-shadow(0 3px 6px rgba(10, 20, 40, 0.28));
-  animation: wx-float 6s ease-in-out infinite;
-}
-
-.wx-cloud--back {
-  fill: rgba(255, 255, 255, 0.5);
-  animation-delay: -3s;
+  animation: wx-float 7s ease-in-out infinite;
 }
 
 @keyframes wx-float {
@@ -53,69 +56,59 @@
     transform: translateX(0);
   }
   50% {
-    transform: translateX(2px);
+    transform: translateX(1.6px);
   }
 }
 
-/* Precipitation */
 .wx-drop {
-  stroke: #7dd3fc;
-  stroke-width: 2.4;
   stroke-linecap: round;
-  animation: wx-fall 1.05s linear infinite;
-}
-
-.wx-drop--light {
-  stroke-width: 1.8;
-  opacity: 0.8;
+  animation: wx-fall 1.15s cubic-bezier(0.45, 0, 0.75, 0.35) infinite;
 }
 
 @keyframes wx-fall {
   0% {
     opacity: 0;
-    transform: translateY(-5px);
+    transform: translateY(-6px);
   }
-  25% {
+  22% {
     opacity: 1;
   }
   100% {
     opacity: 0;
-    transform: translateY(7px);
+    transform: translateY(9px);
   }
 }
 
 .wx-flake {
-  fill: #ffffff;
-  animation: wx-drift 2.4s ease-in-out infinite;
+  animation: wx-drift 2.8s ease-in-out infinite;
 }
 
 @keyframes wx-drift {
   0% {
     opacity: 0;
-    transform: translate(0, -5px);
+    transform: translate(0, -6px) rotate(0deg);
   }
-  30% {
+  28% {
     opacity: 1;
   }
   100% {
     opacity: 0;
-    transform: translate(2px, 8px);
+    transform: translate(2.5px, 9px) rotate(140deg);
   }
 }
 
-/* Fog */
 .wx-fog {
-  stroke: rgba(255, 255, 255, 0.72);
-  stroke-width: 2.2;
+  stroke: rgba(255, 255, 255, 0.82);
+  stroke-width: 2.6;
   stroke-linecap: round;
-  animation: wx-fog-slide 3.4s ease-in-out infinite;
+  animation: wx-fog-slide 3.8s ease-in-out infinite;
 }
 
 @keyframes wx-fog-slide {
   0%,
   100% {
     transform: translateX(-2.5px);
-    opacity: 0.55;
+    opacity: 0.5;
   }
   50% {
     transform: translateX(2.5px);
@@ -123,29 +116,44 @@
   }
 }
 
-/* Lightning */
 .wx-bolt {
-  fill: #ffd54a;
-  filter: drop-shadow(0 0 6px rgba(255, 213, 74, 0.75));
-  animation: wx-flash 2.6s ease-in-out infinite;
+  filter: drop-shadow(0 0 7px rgba(255, 217, 61, 0.8));
+  animation: wx-flash 3.2s ease-in-out infinite;
 }
 
 @keyframes wx-flash {
   0%,
-  62%,
+  58%,
   100% {
-    opacity: 0.85;
+    opacity: 0.9;
   }
-  68% {
-    opacity: 0.2;
+  64% {
+    opacity: 0.15;
   }
-  74% {
+  70% {
     opacity: 1;
   }
-  80% {
-    opacity: 0.35;
+  76% {
+    opacity: 0.3;
   }
-  86% {
+  82% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wx-sun__rays,
+  .wx-sun__core,
+  .wx-moon,
+  .wx-cloud,
+  .wx-drop,
+  .wx-flake,
+  .wx-fog,
+  .wx-bolt {
+    animation: none;
+  }
+  .wx-drop,
+  .wx-flake {
     opacity: 1;
   }
 }

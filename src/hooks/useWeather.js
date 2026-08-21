@@ -2,11 +2,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { fetchWeather } from "../lib/api.js";
 import { loadLastWeather, saveLastWeather } from "../lib/storage.js";
 
-/**
- * Fetches weather for a place, keeping the previously rendered data visible
- * while a refresh is in flight so the layout never collapses to a spinner.
- * Falls back to the cached last-known reading when the network fails.
- */
 export function useWeather(place, units) {
   const [weather, setWeather] = useState(null);
   const [status, setStatus] = useState("idle");
@@ -39,7 +34,6 @@ export function useWeather(place, units) {
         if (cause.name === "AbortError") return;
         setError(cause.message || "Something went wrong.");
 
-        // Offline or the service is down: show the last good reading, marked stale.
         const cached = loadLastWeather();
         if (cached && cached.place?.id === target.id) {
           setWeather(cached);

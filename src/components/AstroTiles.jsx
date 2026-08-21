@@ -3,7 +3,6 @@ import { moonPhase, formatDuration, daylightDelta } from "../lib/astronomy.js";
 import { parseLocalIso } from "../lib/format.js";
 import "../styles/astro.css";
 
-/** Moon phase + daylight length. Both computed locally, no extra request. */
 export default function AstroTiles({ weather }) {
   const moonRef = useGlassPointer();
   const dayRef = useGlassPointer();
@@ -14,7 +13,10 @@ export default function AstroTiles({ weather }) {
     ? parseLocalIso(weather.current.time)
     : new Date();
   const moon = moonPhase(date);
-  const delta = daylightDelta(today?.daylightSeconds, yesterday?.daylightSeconds);
+  const delta = daylightDelta(
+    today?.daylightSeconds,
+    yesterday?.daylightSeconds
+  );
 
   return (
     <>
@@ -50,21 +52,12 @@ export default function AstroTiles({ weather }) {
   );
 }
 
-/**
- * Moon drawn as a lit disc plus a terminator built from two arcs: the outer
- * limb, and an ellipse whose horizontal radius tracks the phase. That ellipse
- * is what produces a true crescent → half → gibbous progression, which a
- * simple offset circle cannot do.
- */
 function MoonGlyph({ phase }) {
   const r = 22;
   const waxing = phase < 0.5;
-  // 1 at new moon → 0 at half → -1 at full.
   const k = Math.cos(2 * Math.PI * phase);
   const rx = Math.abs(k) * r;
 
-  // Sweep flags decide which side the terminator bulges towards, so the lit
-  // limb stays on the correct side through the whole cycle.
   const outerSweep = waxing ? 1 : 0;
   const innerSweep = k > 0 ? (waxing ? 0 : 1) : waxing ? 1 : 0;
 

@@ -29,9 +29,10 @@
 
 .tile__value {
   margin: 0;
+  font-family: var(--font);
   font-size: 30px;
   font-weight: 300;
-  letter-spacing: -0.03em;
+  letter-spacing: var(--tracking-display);
   line-height: 1;
 }
 
@@ -53,13 +54,22 @@
   border: 1px solid var(--glass-edge);
 }
 
-.tile__chip--low { color: var(--accent-low); }
-.tile__chip--moderate { color: var(--accent-moderate); }
-.tile__chip--high { color: var(--accent-high); }
-.tile__chip--very-high { color: var(--accent-very-high); }
-.tile__chip--extreme { color: var(--accent-extreme); }
+.tile__chip--low {
+  color: var(--accent-low);
+}
+.tile__chip--moderate {
+  color: var(--accent-moderate);
+}
+.tile__chip--high {
+  color: var(--accent-high);
+}
+.tile__chip--very-high {
+  color: var(--accent-very-high);
+}
+.tile__chip--extreme {
+  color: var(--accent-extreme);
+}
 
-/* Meters */
 .meter {
   position: relative;
   height: 5px;
@@ -74,13 +84,22 @@
   transition: width var(--dur-slow) var(--ease-out);
 }
 
-.meter__fill--low { background: var(--accent-low); }
-.meter__fill--moderate { background: var(--accent-moderate); }
-.meter__fill--high { background: var(--accent-high); }
-.meter__fill--very-high { background: var(--accent-very-high); }
-.meter__fill--extreme { background: var(--accent-extreme); }
+.meter__fill--low {
+  background: var(--accent-low);
+}
+.meter__fill--moderate {
+  background: var(--accent-moderate);
+}
+.meter__fill--high {
+  background: var(--accent-high);
+}
+.meter__fill--very-high {
+  background: var(--accent-very-high);
+}
+.meter__fill--extreme {
+  background: var(--accent-extreme);
+}
 
-/* UV meter is a fixed spectrum with a sliding thumb, like the iOS control. */
 .meter--uv {
   overflow: visible;
   background: linear-gradient(
@@ -106,7 +125,6 @@
   box-shadow: 0 1px 4px rgba(6, 14, 32, 0.4);
 }
 
-/* Wind compass */
 .compass {
   position: relative;
   width: 62px;
@@ -131,8 +149,6 @@
   color: var(--ink-ghost);
 }
 
-/* The needle points the way the wind is blowing *towards*, so the caller
-   adds 180° to the meteorological "from" bearing. */
 .compass__needle {
   position: absolute;
   left: 50%;
@@ -157,7 +173,6 @@
   letter-spacing: -0.01em;
 }
 
-/* Sun arc */
 .sunarc {
   width: 100%;
   height: auto;
@@ -189,7 +204,6 @@
   filter: drop-shadow(0 0 5px rgba(255, 213, 74, 0.85));
 }
 
-/* Shared padding for the large panels inside the sheet. */
 .panel {
   padding: var(--sp-5);
   border-radius: var(--r-lg);

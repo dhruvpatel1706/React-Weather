@@ -2,11 +2,6 @@ import { buildNowcast } from "../lib/nowcast.js";
 import { formatHour } from "../lib/format.js";
 import "../styles/nowcast.css";
 
-/**
- * Minute-scale precipitation nowcast — the feature Dark Sky was loved for.
- * Renders a 12-hour bar chart of 15-minute precipitation buckets under a
- * plain-language headline.
- */
 export default function Nowcast({ weather }) {
   const nowcast = buildNowcast(weather);
   if (!nowcast?.hasData) return null;
@@ -43,7 +38,9 @@ export default function Nowcast({ weather }) {
       <div className="nowcast__axis" aria-hidden="true">
         {marks.map((index) => (
           <span key={index}>
-            {index === 0 ? "Now" : formatHour(buckets[index].time, weather.timezone)}
+            {index === 0
+              ? "Now"
+              : formatHour(buckets[index].time, weather.timezone)}
           </span>
         ))}
       </div>

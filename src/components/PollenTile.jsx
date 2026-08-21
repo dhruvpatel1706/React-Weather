@@ -10,8 +10,6 @@ const LABELS = {
   ragweed: "Ragweed",
 };
 
-// Open-Meteo reports pollen in grains/m³; these thresholds follow the
-// commonly used low/moderate/high/very-high bands.
 function band(value) {
   if (value < 10) return { label: "Low", level: "low" };
   if (value < 50) return { label: "Moderate", level: "moderate" };
@@ -19,7 +17,6 @@ function band(value) {
   return { label: "Very High", level: "very-high" };
 }
 
-/** Pollen counts. Open-Meteo covers Europe only, so this renders nothing elsewhere. */
 export default function PollenTile({ weather }) {
   const ref = useGlassPointer();
   const pollen = weather.air?.pollen ?? [];
@@ -42,11 +39,15 @@ export default function PollenTile({ weather }) {
           const level = band(entry.value);
           return (
             <li key={entry.key} className="pollen__row">
-              <span className="pollen__name">{LABELS[entry.key] ?? entry.key}</span>
+              <span className="pollen__name">
+                {LABELS[entry.key] ?? entry.key}
+              </span>
               <span className="meter pollen__meter">
                 <span
                   className={`meter__fill meter__fill--${level.level}`}
-                  style={{ width: `${Math.min(100, (entry.value / 200) * 100)}%` }}
+                  style={{
+                    width: `${Math.min(100, (entry.value / 200) * 100)}%`,
+                  }}
                 />
               </span>
               <span className="pollen__value">{Math.round(entry.value)}</span>

@@ -1,5 +1,3 @@
-/** Shareable deep links: ?lat=..&lon=..&name=..&country=.. */
-
 export function placeFromUrl(search = window.location.search) {
   const params = new URLSearchParams(search);
   const lat = Number.parseFloat(params.get("lat"));
@@ -17,7 +15,10 @@ export function placeFromUrl(search = window.location.search) {
   };
 }
 
-export function urlForPlace(place, origin = window.location.origin + window.location.pathname) {
+export function urlForPlace(
+  place,
+  origin = window.location.origin + window.location.pathname
+) {
   const params = new URLSearchParams({
     lat: place.latitude.toFixed(4),
     lon: place.longitude.toFixed(4),
@@ -27,7 +28,6 @@ export function urlForPlace(place, origin = window.location.origin + window.loca
   return `${origin}?${params.toString()}`;
 }
 
-/** Keep the address bar in sync without adding history entries. */
 export function syncUrl(place) {
   if (typeof window === "undefined" || !window.history?.replaceState) return;
   const params = new URLSearchParams({

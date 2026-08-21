@@ -2,8 +2,13 @@ import { useState } from "react";
 import { urlForPlace } from "../lib/url.js";
 import "../styles/toolbar.css";
 
-/** Units toggle, share, and theme switch. */
-export default function Toolbar({ units, onUnitsChange, place, theme, onThemeChange }) {
+export default function Toolbar({
+  units,
+  onUnitsChange,
+  place,
+  theme,
+  onThemeChange,
+}) {
   const [copied, setCopied] = useState(false);
 
   const share = async () => {
@@ -11,14 +16,11 @@ export default function Toolbar({ units, onUnitsChange, place, theme, onThemeCha
     const url = urlForPlace(place);
     const title = `Weather in ${place.name}`;
 
-    // Native share sheet on mobile; clipboard everywhere else.
     if (navigator.share) {
       try {
         await navigator.share({ title, url });
         return;
-      } catch {
-        // User dismissed the sheet, or it is unavailable — fall through.
-      }
+      } catch {}
     }
     try {
       await navigator.clipboard.writeText(url);
@@ -31,7 +33,11 @@ export default function Toolbar({ units, onUnitsChange, place, theme, onThemeCha
 
   return (
     <div className="toolbar">
-      <div className="toolbar__units glass" role="group" aria-label="Temperature units">
+      <div
+        className="toolbar__units glass"
+        role="group"
+        aria-label="Temperature units"
+      >
         <button
           type="button"
           className={units === "metric" ? "is-on" : ""}
@@ -108,7 +114,14 @@ const CheckGlyph = () => (
 
 const SunGlyph = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
-    <circle cx="12" cy="12" r="4.4" fill="none" stroke="currentColor" strokeWidth="1.9" />
+    <circle
+      cx="12"
+      cy="12"
+      r="4.4"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.9"
+    />
     <path
       d="M12 2v2.6M12 19.4V22M2 12h2.6M19.4 12H22M4.9 4.9l1.9 1.9M17.2 17.2l1.9 1.9M19.1 4.9l-1.9 1.9M6.8 17.2l-1.9 1.9"
       stroke="currentColor"

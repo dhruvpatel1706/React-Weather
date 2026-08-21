@@ -43,7 +43,12 @@ describe("DetailTiles", () => {
   it("degrades to placeholders when readings are missing", () => {
     const sparse = {
       ...weather,
-      current: { ...weather.current, humidity: null, pressure: null, visibility: null },
+      current: {
+        ...weather.current,
+        humidity: null,
+        pressure: null,
+        visibility: null,
+      },
       air: null,
     };
     render(<DetailTiles weather={sparse} />);

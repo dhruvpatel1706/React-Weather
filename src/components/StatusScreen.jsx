@@ -1,7 +1,10 @@
 import "../styles/status.css";
 
-/** Full-page loading / error state, used before the first reading arrives. */
-export default function StatusScreen({ variant = "loading", message, onRetry }) {
+export default function StatusScreen({
+  variant = "loading",
+  message,
+  onRetry,
+}) {
   if (variant === "loading") {
     return (
       <div className="status" role="status" aria-live="polite">
@@ -16,7 +19,11 @@ export default function StatusScreen({ variant = "loading", message, onRetry }) 
       <p className="status__title">Couldn't load the weather</p>
       <p className="status__text">{message}</p>
       {onRetry && (
-        <button type="button" className="status__retry glass glass--interactive" onClick={onRetry}>
+        <button
+          type="button"
+          className="status__retry glass glass--interactive"
+          onClick={onRetry}
+        >
           Try again
         </button>
       )}

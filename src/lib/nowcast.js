@@ -2,14 +2,6 @@ import { parseLocalIso } from "./format.js";
 
 const WET = 0.05; // mm per 15-minute bucket that counts as "raining"
 
-/**
- * Turn 15-minute precipitation buckets into a Dark-Sky-style sentence:
- * "Rain starting in about 20 minutes", "Rain stopping in about 45 minutes",
- * or a plain all-clear.
- *
- * @returns {{ headline: string, detail: string, active: boolean,
- *             buckets: Array, hasData: boolean } | null}
- */
 export function buildNowcast(weather) {
   const buckets = weather?.minutely ?? [];
   if (!buckets.length) return null;
@@ -20,9 +12,7 @@ export function buildNowcast(weather) {
 
   const series = buckets.map((bucket) => ({
     ...bucket,
-    minutes: Math.round(
-      (parseLocalIso(bucket.time).getTime() - now) / 60000
-    ),
+    minutes: Math.round((parseLocalIso(bucket.time).getTime() - now) / 60000),
   }));
 
   const upcoming = series.filter((bucket) => bucket.minutes >= -15);

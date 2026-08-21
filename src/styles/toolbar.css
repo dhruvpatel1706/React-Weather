@@ -18,7 +18,9 @@
   font-size: 13px;
   font-weight: 700;
   color: var(--ink-faint);
-  transition: background var(--dur) var(--ease-out), color var(--dur) var(--ease-out);
+  transition:
+    background var(--dur) var(--ease-out),
+    color var(--dur) var(--ease-out);
 }
 
 .toolbar__units button.is-on {
