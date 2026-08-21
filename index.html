@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Aurora Weather</title>
+    <meta
+      name="description"
+      content="A liquid-glass weather app with minute-by-minute precipitation, 10-day forecasts, air quality and live animated skies. No API key required."
+    />
+    <meta name="theme-color" content="#0b1a33" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Aurora" />
+
+    <meta property="og:title" content="Aurora Weather" />
+    <meta property="og:description" content="Liquid-glass weather, no API key required." />
+    <meta property="og:type" content="website" />
+
+    <link rel="icon" href="./icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./icon-192.png" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+
+    <!-- Paint the sky before React mounts so there is no white flash. -->
+    <style>
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        background: linear-gradient(170deg, #0b1a33 0%, #1b3a63 48%, #3d6491 100%);
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

@@ -1,0 +1,85 @@
+.daily {
+  padding: var(--sp-5);
+}
+
+.daily__list {
+  margin: var(--sp-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.daily__row {
+  display: grid;
+  grid-template-columns: 56px 34px 36px 40px 1fr 40px;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-2);
+  border-radius: var(--r-sm);
+  transition: background var(--dur) var(--ease-out);
+}
+
+.daily__row:hover {
+  background: var(--glass-fill);
+}
+
+.daily__row + .daily__row {
+  border-top: 1px solid var(--glass-edge);
+}
+
+.daily__day {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.daily__icon {
+  display: grid;
+  place-items: center;
+}
+
+.daily__pop {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--accent-cool);
+  text-align: right;
+}
+
+.daily__lo {
+  font-size: 14px;
+  color: var(--ink-faint);
+  text-align: right;
+}
+
+.daily__hi {
+  font-size: 14px;
+  font-weight: 600;
+  text-align: right;
+}
+
+/* Range bar: positioned within the whole week's low→high span. */
+.daily__track {
+  position: relative;
+  height: 5px;
+  border-radius: var(--r-pill);
+  background: var(--glass-fill);
+  overflow: hidden;
+}
+
+.daily__range {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: var(--r-pill);
+  background: linear-gradient(
+    to right,
+    var(--accent-cool),
+    var(--accent-moderate),
+    var(--accent-warm)
+  );
+}
+
+@media (max-width: 480px) {
+  .daily__row {
+    grid-template-columns: 46px 28px 30px 34px 1fr 34px;
+    gap: 6px;
+  }
+}

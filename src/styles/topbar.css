@@ -1,0 +1,118 @@
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  padding: var(--sp-3) var(--sp-4);
+  width: min(1180px, 100%);
+  margin: 0 auto;
+}
+
+/* Content scrolls beneath this bar, so the material has to be substantial
+   enough to reduce whatever passes behind it to an indistinct wash — a light
+   blur alone leaves bold headings legible and the overlap reads as a
+   collision rather than as layering. */
+.topbar__inner {
+  background: var(--topbar-fill);
+  backdrop-filter: blur(40px) saturate(160%);
+  -webkit-backdrop-filter: blur(40px) saturate(160%);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: 7px 7px 7px var(--sp-3);
+  border-radius: var(--r-pill);
+  transition: box-shadow var(--dur) var(--ease-out);
+}
+
+/* Identity block collapses to zero width until the hero is out of view. */
+.topbar__identity {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex: none;
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transition:
+    max-width 420ms var(--ease-out),
+    opacity 260ms var(--ease-out),
+    margin 420ms var(--ease-out);
+}
+
+.topbar.is-condensed .topbar__identity {
+  max-width: 260px;
+  opacity: 1;
+  margin-right: var(--sp-1);
+}
+
+.topbar__city {
+  font-size: 14px;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topbar__temp {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.topbar__search {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 700px) {
+  .topbar__inner {
+    padding: 6px;
+  }
+}
+
+/* On narrow screens the units toggle plus two icon buttons leave the search
+   field too little room to show its placeholder, so give search its own row
+   and drop the controls beneath it. */
+@media (max-width: 620px) {
+  .topbar {
+    padding: var(--sp-2) var(--sp-3);
+  }
+
+  .topbar__inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "search search"
+      "identity toolbar";
+    gap: var(--sp-2);
+    padding: var(--sp-2);
+    border-radius: var(--r-lg);
+  }
+
+  .topbar__search {
+    grid-area: search;
+  }
+
+  .topbar .toolbar {
+    grid-area: toolbar;
+    justify-self: end;
+  }
+
+  /* The identity block reappears here once the hero scrolls away, filling the
+     space beside the controls rather than being hidden outright. */
+  .topbar__identity {
+    display: flex;
+    grid-area: identity;
+    align-self: center;
+  }
+
+  .topbar:not(.is-condensed) .topbar__identity {
+    max-width: 0;
+  }
+
+  .topbar.is-condensed .topbar__identity {
+    max-width: 100%;
+  }
+}

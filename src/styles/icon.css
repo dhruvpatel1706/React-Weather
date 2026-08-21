@@ -1,0 +1,151 @@
+/* Weather icon glyphs. Strokes/fills inherit from currentColor where possible
+   so icons tint correctly on any glass surface. */
+
+.wx {
+  display: block;
+  overflow: visible;
+}
+
+/* Sun */
+.wx-sun__core {
+  fill: #ffd54a;
+  filter: drop-shadow(0 0 7px rgba(255, 205, 74, 0.65));
+}
+
+.wx-sun__ray {
+  stroke: #ffd54a;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+}
+
+.wx-sun {
+  transform-origin: 24px 24px;
+  animation: wx-spin 26s linear infinite;
+}
+
+@keyframes wx-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Moon */
+.wx-moon {
+  fill: #e9eefb;
+  filter: drop-shadow(0 0 7px rgba(200, 220, 255, 0.55));
+}
+
+/* Clouds */
+.wx-cloud {
+  fill: rgba(255, 255, 255, 0.94);
+  filter: drop-shadow(0 3px 6px rgba(10, 20, 40, 0.28));
+  animation: wx-float 6s ease-in-out infinite;
+}
+
+.wx-cloud--back {
+  fill: rgba(255, 255, 255, 0.5);
+  animation-delay: -3s;
+}
+
+@keyframes wx-float {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(2px);
+  }
+}
+
+/* Precipitation */
+.wx-drop {
+  stroke: #7dd3fc;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  animation: wx-fall 1.05s linear infinite;
+}
+
+.wx-drop--light {
+  stroke-width: 1.8;
+  opacity: 0.8;
+}
+
+@keyframes wx-fall {
+  0% {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+}
+
+.wx-flake {
+  fill: #ffffff;
+  animation: wx-drift 2.4s ease-in-out infinite;
+}
+
+@keyframes wx-drift {
+  0% {
+    opacity: 0;
+    transform: translate(0, -5px);
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(2px, 8px);
+  }
+}
+
+/* Fog */
+.wx-fog {
+  stroke: rgba(255, 255, 255, 0.72);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  animation: wx-fog-slide 3.4s ease-in-out infinite;
+}
+
+@keyframes wx-fog-slide {
+  0%,
+  100% {
+    transform: translateX(-2.5px);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translateX(2.5px);
+    opacity: 1;
+  }
+}
+
+/* Lightning */
+.wx-bolt {
+  fill: #ffd54a;
+  filter: drop-shadow(0 0 6px rgba(255, 213, 74, 0.75));
+  animation: wx-flash 2.6s ease-in-out infinite;
+}
+
+@keyframes wx-flash {
+  0%,
+  62%,
+  100% {
+    opacity: 0.85;
+  }
+  68% {
+    opacity: 0.2;
+  }
+  74% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 0.35;
+  }
+  86% {
+    opacity: 1;
+  }
+}

@@ -1,0 +1,50 @@
+.nowcast {
+  padding: var(--sp-5);
+}
+
+.nowcast__head {
+  margin-bottom: var(--sp-4);
+}
+
+.nowcast__headline {
+  margin: var(--sp-2) 0 0;
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.nowcast.is-active .nowcast__headline {
+  color: var(--accent-cool);
+}
+
+.nowcast__detail {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--ink-faint);
+}
+
+.nowcast__chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 64px;
+  padding: 0 2px;
+  border-bottom: 1px solid var(--glass-edge);
+}
+
+.nowcast__bar {
+  flex: 1;
+  min-width: 2px;
+  border-radius: 3px 3px 0 0;
+  background: linear-gradient(to top, var(--accent-cool), #a5e4ff);
+  transition: height var(--dur-slow) var(--ease-out);
+}
+
+.nowcast__axis {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 7px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-ghost);
+}

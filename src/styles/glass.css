@@ -1,0 +1,178 @@
+/* ==========================================================================
+   Liquid glass material
+   --------------------------------------------------------------------------
+   Built in five layers, painted back to front:
+
+     1. backdrop      — blur + saturate + a displacement warp, so the sky
+                        actually refracts through the panel
+     2. tint          — the translucent body of the glass
+     3. edge lens     — a ring where light bends hardest, with chromatic
+                        fringing (warm outside, cool inside), like a real bevel
+     4. specular      — a moving highlight that tracks the pointer
+     5. depth         — stacked ambient + contact shadows, plus an inner glow
+
+   Everything keys off --mx/--my (pointer position, 0–1) which useGlassPointer
+   writes onto each surface.
+   ========================================================================== */
+
+.glass-filters {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.glass {
+  --mx: 0.5;
+  --my: 0.3;
+  position: relative;
+  border-radius: var(--r-lg);
+  background: var(--glass-fill);
+  box-shadow:
+    var(--shadow-ambient),
+    var(--shadow-contact),
+    inset 0 1px 0 0 var(--glass-specular),
+    inset 0 0 24px -6px rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate))
+    brightness(1.02);
+  -webkit-backdrop-filter: blur(var(--glass-blur))
+    saturate(var(--glass-saturate)) brightness(1.02);
+  isolation: isolate;
+  transform-style: preserve-3d;
+}
+
+/* Layer 3 — edge lens.
+   A 1.5px ring carrying a warm/cool split: the outer face picks up warm light,
+   the inner face throws cool. That split is what sells "thick glass" instead
+   of "1px white border". */
+.glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(
+    calc(var(--mx) * 120deg + 100deg),
+    rgba(255, 214, 190, 0.85) 0%,
+    rgba(255, 255, 255, 0.95) 18%,
+    rgba(190, 225, 255, 0.7) 38%,
+    rgba(255, 255, 255, 0.1) 58%,
+    rgba(160, 200, 255, 0.35) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0.9;
+}
+
+/* Layer 4 — specular highlight tracking the pointer. */
+.glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(
+      60% 50% at calc(var(--mx) * 100%) calc(var(--my) * 100%),
+      rgba(255, 255, 255, 0.22) 0%,
+      rgba(255, 255, 255, 0.06) 40%,
+      transparent 72%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.16) 0%,
+      rgba(255, 255, 255, 0.02) 30%,
+      transparent 55%
+    );
+  pointer-events: none;
+  z-index: 2;
+  transition: background var(--dur) var(--ease-out);
+}
+
+.glass > * {
+  position: relative;
+  z-index: 4;
+}
+
+/* Refraction. Kept on its own class so it can be switched off wholesale where
+   it is too expensive (long lists) or unsupported. */
+.glass--refract {
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate))
+    brightness(1.02) url(#glass-warp);
+  -webkit-backdrop-filter: blur(var(--glass-blur))
+    saturate(var(--glass-saturate)) brightness(1.02) url(#glass-warp);
+}
+
+.glass--strong {
+  background: var(--glass-fill-strong);
+  backdrop-filter: blur(var(--glass-blur-heavy)) saturate(var(--glass-saturate))
+    brightness(1.03);
+  -webkit-backdrop-filter: blur(var(--glass-blur-heavy))
+    saturate(var(--glass-saturate)) brightness(1.03);
+}
+
+/* Thin, bright glass for pills and controls. */
+.glass--thin {
+  background: var(--glass-fill-thin);
+  backdrop-filter: blur(20px) saturate(150%) brightness(1.04);
+  -webkit-backdrop-filter: blur(20px) saturate(150%) brightness(1.04);
+  box-shadow:
+    0 8px 24px -8px rgba(4, 10, 24, 0.4),
+    inset 0 1px 0 0 var(--glass-specular);
+}
+
+/* Interactive surfaces lift and brighten, and tilt toward the pointer. */
+.glass--interactive {
+  transition:
+    background var(--dur) var(--ease-out),
+    box-shadow var(--dur) var(--ease-out),
+    transform var(--dur) var(--ease-spring);
+  will-change: transform;
+}
+
+.glass--interactive:hover {
+  background: var(--glass-fill-hover);
+  box-shadow:
+    var(--shadow-lift),
+    var(--shadow-contact),
+    inset 0 1px 0 0 var(--glass-edge-strong),
+    inset 0 0 34px -6px rgba(255, 255, 255, 0.26);
+}
+
+.glass--interactive:active {
+  transform: scale(0.985);
+  transition-duration: var(--dur-fast);
+}
+
+/* Pointer tilt: a shallow 3D rotation toward the cursor. The rotation is
+   deliberately small — enough to catch the light, not enough to distort text. */
+.glass--tilt {
+  transform: perspective(1400px)
+    rotateX(calc((var(--my) - 0.5) * -5deg))
+    rotateY(calc((var(--mx) - 0.5) * 7deg));
+  transition: transform 420ms var(--ease-out);
+}
+
+/* Fallbacks ------------------------------------------------------------- */
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass {
+    background: rgba(16, 28, 50, 0.86);
+  }
+  :root[data-theme="light"] .glass {
+    background: rgba(255, 255, 255, 0.92);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass--tilt {
+    transform: none;
+  }
+}

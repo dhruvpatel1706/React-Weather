@@ -1,0 +1,44 @@
+.toolbar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex: none;
+}
+
+.toolbar__units {
+  display: flex;
+  padding: 3px;
+  border-radius: var(--r-pill);
+}
+
+.toolbar__units button {
+  padding: 6px 13px;
+  border-radius: var(--r-pill);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-faint);
+  transition: background var(--dur) var(--ease-out), color var(--dur) var(--ease-out);
+}
+
+.toolbar__units button.is-on {
+  background: var(--glass-fill-hover);
+  color: var(--ink);
+}
+
+.toolbar__toast {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  padding: 6px 11px;
+  border-radius: var(--r-pill);
+  background: var(--glass-fill-strong);
+  border: 1px solid var(--glass-edge);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  animation: rise var(--dur) var(--ease-out);
+  z-index: 20;
+}

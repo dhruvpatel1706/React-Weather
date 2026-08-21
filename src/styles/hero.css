@@ -1,0 +1,230 @@
+/* ==========================================================================
+   Hero — full-bleed, no panel. Type sits on the sky.
+   ========================================================================== */
+
+.hero {
+  position: relative;
+  min-height: min(74vh, 660px);
+  display: flex;
+  flex-direction: column;
+  padding: var(--sp-2) 0 var(--sp-6);
+  /* Drifts up slightly slower than the page, so it recedes behind the sheet. */
+  transform: translate3d(0, calc(var(--scroll, 0) * 40px), 0);
+  opacity: calc(1 - var(--scroll, 0) * 0.85);
+  will-change: transform, opacity;
+}
+
+.hero__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-4);
+}
+
+.hero__city {
+  margin: 0;
+  font-size: clamp(30px, 5.2vw, 52px);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  text-shadow: 0 2px 30px rgba(4, 10, 24, 0.45);
+}
+
+.hero__region {
+  margin: 8px 0 0;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--ink-soft);
+  text-shadow: 0 1px 16px rgba(4, 10, 24, 0.4);
+}
+
+.hero__actions {
+  display: flex;
+  gap: var(--sp-2);
+  flex: none;
+}
+
+/* The reading block is pushed toward the optical centre of the viewport. */
+/* Everything below the place name is one block, pinned to the bottom of the
+   hero so the composition reads as sky above, reading below. */
+.hero__lower {
+  margin-top: auto;
+  padding-top: var(--sp-5);
+}
+
+.hero__temp-wrap {
+  display: flex;
+  align-items: center;
+  gap: clamp(var(--sp-2), 3vw, var(--sp-6));
+}
+
+.hero__temp {
+  margin: 0;
+  display: flex;
+  align-items: flex-start;
+  font-size: clamp(96px, 19vw, 210px);
+  font-weight: 150;
+  line-height: 0.84;
+  letter-spacing: -0.055em;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 8px 60px rgba(4, 10, 24, 0.5);
+}
+
+.hero__deg {
+  font-weight: 150;
+  margin-left: -0.03em;
+}
+
+.hero__unit {
+  font-size: 0.22em;
+  font-weight: 600;
+  letter-spacing: 0;
+  margin-top: 0.62em;
+  margin-left: 0.1em;
+  color: var(--ink-soft);
+}
+
+.hero__icon {
+  flex: none;
+  filter: drop-shadow(0 14px 40px rgba(4, 10, 24, 0.5));
+  animation: hero-icon-in 900ms var(--ease-spring) backwards 180ms;
+}
+
+@keyframes hero-icon-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.86);
+  }
+}
+
+.hero__condition {
+  margin: var(--sp-4) 0 0;
+  font-size: clamp(20px, 2.6vw, 27px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 24px rgba(4, 10, 24, 0.45);
+}
+
+.hero__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin: var(--sp-3) 0 0;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  text-shadow: 0 1px 16px rgba(4, 10, 24, 0.4);
+}
+
+.hero__dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--ink-ghost);
+}
+
+.hero__hi { color: var(--accent-warm); }
+.hero__lo { color: var(--accent-cool); }
+
+.hero__date {
+  margin: var(--sp-2) 0 0;
+  font-size: 13px;
+  color: var(--ink-faint);
+  text-shadow: 0 1px 14px rgba(4, 10, 24, 0.4);
+}
+
+.hero__recommendation {
+  margin: var(--sp-5) 0 0;
+  max-width: 46ch;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  text-shadow: 0 1px 18px rgba(4, 10, 24, 0.42);
+}
+
+.hero__compare {
+  color: var(--ink-faint);
+}
+
+.hero__stale {
+  margin: var(--sp-3) 0 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-moderate);
+}
+
+/* Scroll cue: a slow travelling dot inside a hairline rail. */
+.hero__scroll-cue {
+  position: absolute;
+  left: 50%;
+  bottom: -2px;
+  transform: translateX(-50%);
+  width: 26px;
+  height: 42px;
+  border-radius: var(--r-pill);
+  border: 1.5px solid var(--glass-edge-strong);
+  background: var(--glass-fill);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: grid;
+  justify-items: center;
+  padding-top: 9px;
+  opacity: calc(1 - var(--scroll, 0) * 3);
+}
+
+.hero__scroll-cue span {
+  width: 3.5px;
+  height: 8px;
+  border-radius: var(--r-pill);
+  background: var(--ink-faint);
+  animation: cue 1.9s var(--ease-out) infinite;
+}
+
+@keyframes cue {
+  0% { opacity: 0; transform: translateY(0); }
+  30% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(12px); }
+}
+
+.rolling {
+  display: inline-block;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 640px) {
+  .hero {
+    min-height: min(78vh, 620px);
+  }
+  .hero__temp-wrap {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+  .hero__icon {
+    align-self: flex-end;
+    margin-top: -46px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero {
+    transform: none;
+    opacity: 1;
+  }
+  .hero__scroll-cue span {
+    animation: none;
+  }
+}
+
+/* The heavy dark text shadows exist to lift white type off a bright sky.
+   In light mode the type is already dark, so they only muddy it. */
+:root[data-theme="light"] .hero__city,
+:root[data-theme="light"] .hero__region,
+:root[data-theme="light"] .hero__temp,
+:root[data-theme="light"] .hero__condition,
+:root[data-theme="light"] .hero__meta,
+:root[data-theme="light"] .hero__date,
+:root[data-theme="light"] .hero__recommendation {
+  text-shadow: 0 1px 12px rgba(255, 255, 255, 0.55);
+}

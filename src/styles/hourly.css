@@ -1,0 +1,81 @@
+.hourly {
+  padding: var(--sp-5);
+}
+
+.hourly__scroll {
+  margin-top: var(--sp-4);
+  padding-bottom: var(--sp-2);
+}
+
+.hourly__list {
+  display: flex;
+  gap: var(--sp-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  min-width: min-content;
+}
+
+.hourly__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  flex: none;
+  width: 62px;
+  padding: var(--sp-3) 0;
+  border-radius: var(--r-md);
+  transition: background var(--dur) var(--ease-out);
+}
+
+.hourly__item:hover {
+  background: var(--glass-fill);
+}
+
+.hourly__time {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+
+.hourly__pop {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent-cool);
+  min-height: 14px;
+}
+
+.hourly__pop--empty {
+  visibility: hidden;
+}
+
+.hourly__temp {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* Sparkline: each hour's bar height encodes its temperature within the
+   24-hour min/max, giving the strip a readable silhouette. */
+.hourly__bar {
+  display: block;
+  width: 4px;
+  height: 42px;
+  border-radius: var(--r-pill);
+  background: var(--glass-fill);
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.hourly__bar-fill {
+  display: block;
+  width: 100%;
+  border-radius: var(--r-pill);
+  background: linear-gradient(
+    to top,
+    var(--accent-cool),
+    var(--accent-warm)
+  );
+}

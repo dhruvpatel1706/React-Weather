@@ -1,0 +1,65 @@
+.trend {
+  padding: var(--sp-5);
+}
+
+.trend__scroll {
+  margin-top: var(--sp-3);
+}
+
+.trend__svg {
+  width: 100%;
+  min-width: 520px;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+.trend__line {
+  stroke: var(--ink);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 2px 6px rgba(6, 14, 32, 0.35));
+}
+
+.trend__stop-top {
+  stop-color: var(--accent-warm);
+  stop-opacity: 0.38;
+}
+
+.trend__stop-bottom {
+  stop-color: var(--accent-cool);
+  stop-opacity: 0.02;
+}
+
+.trend__pop {
+  fill: var(--accent-cool);
+  opacity: 0.38;
+}
+
+.trend__peak {
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+
+.trend__peak--hot {
+  fill: var(--accent-warm);
+}
+
+.trend__peak--cold {
+  fill: var(--accent-cool);
+}
+
+.trend__peak-label {
+  fill: var(--ink);
+  font-size: 12px;
+  font-weight: 700;
+  font-family: var(--font);
+}
+
+.trend__tick {
+  fill: var(--ink-ghost);
+  font-size: 11px;
+  font-weight: 600;
+  font-family: var(--font);
+}
