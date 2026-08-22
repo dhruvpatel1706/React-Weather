@@ -40,10 +40,19 @@ function initialPlace() {
   return placeFromUrl() ?? loadLastWeather()?.place ?? DEFAULT_PLACE;
 }
 
+function initialTheme() {
+  if (typeof document === "undefined") return "dark";
+  const declared = document.documentElement.dataset.theme;
+  if (declared === "light" || declared === "dark") return declared;
+  return window.matchMedia?.("(prefers-color-scheme: light)").matches
+    ? "light"
+    : "dark";
+}
+
 export default function App() {
   const [place, setPlace] = useState(initialPlace);
   const [units, setUnits] = useState(loadUnits);
-  const [theme, setTheme] = useState("dark");
+  const [theme, setTheme] = useState(initialTheme);
 
   const { weather, status, error, stale, refresh } = useWeather(place, units);
   const { cities, isSaved, toggle, remove } = useSavedCities();

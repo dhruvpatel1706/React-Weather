@@ -1,4 +1,5 @@
 export function placeFromUrl(search = window.location.search) {
+  if (typeof search !== "string") return null;
   const params = new URLSearchParams(search);
   const lat = Number.parseFloat(params.get("lat"));
   const lon = Number.parseFloat(params.get("lon"));
@@ -36,5 +37,9 @@ export function syncUrl(place) {
     name: place.name,
   });
   if (place.country) params.set("country", place.country);
-  window.history.replaceState(null, "", `?${params.toString()}`);
+  try {
+    window.history.replaceState(null, "", `?${params.toString()}`);
+  } catch {
+    // Sandboxed frames with an opaque origin reject history writes.
+  }
 }
