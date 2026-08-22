@@ -61,11 +61,15 @@ export default function App() {
   useScrollProgress();
   const searchRef = useRef(null);
 
-  useEffect(() => saveUnits(units), [units]);
+  useEffect(() => {
+    saveUnits(units);
+  }, [units]);
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
   }, [theme]);
-  useEffect(() => syncUrl(place), [place]);
+  useEffect(() => {
+    syncUrl(place);
+  }, [place]);
 
   useEffect(() => {
     const timer = setInterval(refresh, REFRESH_MS);
