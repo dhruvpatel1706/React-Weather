@@ -31,7 +31,11 @@ jobs:
 
       - run: npm run build
 
+      # enablement creates the Pages site on first run, so no manual setup
+      # is needed beyond Actions being allowed to write Pages.
       - uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       - uses: actions/upload-pages-artifact@v3
         with:
