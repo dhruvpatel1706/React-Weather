@@ -67,6 +67,23 @@ That is the whole setup. There is no `.env` to create.
 | `npm run coverage` | Test suite with coverage |
 | `npm run format` | Format with Prettier |
 
+## Deploying
+
+`.github/workflows/deploy.yml` builds, tests and publishes to GitHub Pages on
+every push to `master`.
+
+Pages has to be turned on once by the repository owner — the Actions token is
+not permitted to create the site itself:
+
+**Settings → Pages → Build and deployment → Source → GitHub Actions**
+
+Then re-run the workflow (Actions → Deploy to GitHub Pages → Run workflow).
+The site publishes to `https://dhruvpatel1706.github.io/React-Weather/`.
+
+Relative asset paths (`base: "./"` in `vite.config.js`) mean the build works
+unchanged from a project subpath, and the service worker scopes itself to the
+same subpath.
+
 ## Architecture
 
 ```
